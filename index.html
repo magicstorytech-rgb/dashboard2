@@ -3,215 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Alpha Method</title>
+<title>Alpha Method — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;padding:20px;min-height:100vh}
-.container{max-width:1600px;margin:0 auto}
-.header{background:linear-gradient(135deg,#1a1a1a,#2d0000);border:2px solid #cc0000;border-radius:12px;padding:30px;margin-bottom:20px;box-shadow:0 0 30px rgba(204,0,0,.3)}
-.title{font-size:32px;font-weight:900;color:#ff3333;margin-bottom:6px;text-shadow:0 0 20px rgba(255,51,51,.6)}
-.subtitle{color:#ccc;font-size:14px}
-.status-banner{background:rgba(0,255,0,.07);border:1px solid #00ff00;border-radius:8px;padding:10px 15px;margin-bottom:20px;font-size:12px;color:#00ff00;font-weight:700;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
-.status-dot{width:8px;height:8px;background:#00ff00;border-radius:50%;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.online-badge{background:rgba(204,0,0,.15);border:2px solid #cc0000;padding:20px;border-radius:12px;text-align:center;margin-bottom:25px}
-.online-label{color:#ccc;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.online-count{font-size:60px;font-weight:900;color:#ff3333;text-shadow:0 0 30px rgba(255,51,51,.6);line-height:1}
-.insights-section{background:linear-gradient(135deg,#0d1a0d,#001a00);border:2px solid #00cc44;border-radius:12px;padding:25px;margin-bottom:25px;box-shadow:0 0 25px rgba(0,204,68,.15)}
-.insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;margin-top:18px}
-.insight-card{background:rgba(0,0,0,.4);border:1px solid #1a3320;border-radius:10px;padding:18px;position:relative;overflow:hidden}
-.insight-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:#00cc44}
-.insight-card.warn::before{background:#fbbf24}
-.insight-card.danger::before{background:#ef4444}
-.insight-card.great::before{background:#00ff88}
-.insight-icon{font-size:24px;margin-bottom:8px}
-.insight-title{font-size:11px;font-weight:800;color:#00cc44;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.insight-card.warn .insight-title{color:#fbbf24}
-.insight-card.danger .insight-title{color:#ef4444}
-.insight-card.great .insight-title{color:#00ff88}
-.insight-value{font-size:26px;font-weight:900;color:#fff;margin-bottom:4px;line-height:1.1}
-.insight-desc{font-size:12px;color:#999;line-height:1.5;margin-top:6px}
-.section{background:linear-gradient(135deg,#1a1a1a,#111);border:2px solid #333;border-radius:12px;padding:25px;margin-bottom:25px}
-.section-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:15px;display:flex;align-items:center;gap:10px}
-.comp-table{width:100%;border-collapse:collapse;margin-top:15px}
-.comp-table th,.comp-table td{padding:14px;text-align:left;border-bottom:1px solid #222}
-.comp-table th{font-size:11px;color:#666;text-transform:uppercase;font-weight:800}
-.comp-table td{font-size:15px;font-weight:700}
-.comp-label{color:#999}
-.comp-val{color:#fff}
-.sales-section{background:linear-gradient(135deg,#1a1a1a,#2d1a00);border:2px solid #fbbf24;border-radius:12px;padding:25px;margin-bottom:25px}
-.sales-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}
-.sales-card{background:rgba(0,0,0,.5);border:1px solid #333;border-radius:12px;padding:20px}
-.sales-card-title{font-size:13px;font-weight:800;color:#fbbf24;text-transform:uppercase;margin-bottom:15px}
-.sales-list{display:flex;flex-direction:column;gap:10px}
-.sale-item{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center}
-.sale-info{display:flex;flex-direction:column;gap:2px}
-.sale-name{font-size:14px;font-weight:800;color:#fff}
-.sale-meta{font-size:11px;color:#999}
-.sale-amount{font-size:16px;font-weight:900;color:#fbbf24}
-.chart-container{height:300px;margin-top:20px;position:relative}
-.heatmap-table{width:100%;border-collapse:separate;border-spacing:4px;margin-top:15px}
-.heatmap-table th{font-size:10px;color:#666;text-transform:uppercase;padding:5px}
-.heatmap-cell{height:35px;border-radius:4px;text-align:center;font-size:11px;font-weight:800;color:rgba(255,255,255,.2);transition:all .2s}
-.heatmap-cell.empty{background:rgba(255,255,255,.03)}
-.heatmap-cell.low{background:rgba(239,68,68,.25);color:#fff;border:1px solid rgba(239,68,68,.4)}
-.heatmap-cell.medium{background:rgba(251,191,36,.35);color:#fff;border:1px solid rgba(251,191,36,.5)}
-.heatmap-cell.high{background:rgba(34,197,94,.45);color:#fff;border:1px solid rgba(34,197,94,.6)}
-.day-label{font-size:11px;font-weight:800;color:#999;text-align:right;padding-right:10px}
-.heatmap-legend{display:flex;gap:15px;margin-top:15px;justify-content:center}
-.heatmap-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#666;font-weight:700}
-.heatmap-legend-color{width:12px;height:12px;border-radius:3px}
-.channel-perf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:18px}
-.channel-perf-card{background:rgba(0,0,0,.5);border:3px solid #333;border-radius:14px;padding:22px;transition:all .3s}
-.channel-perf-card.best{border-color:#00ff00;background:linear-gradient(135deg,rgba(0,255,0,.08),rgba(0,255,0,.02))}
-.channel-perf-card.good{border-color:#fbbf24;background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(251,191,36,.01))}
-.channel-perf-card.bad{border-color:#ef4444;background:linear-gradient(135deg,rgba(239,68,68,.06),rgba(239,68,68,.01))}
-.cpc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.cpc-name{font-size:16px;font-weight:900;color:#fff}
-.cpc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.cpc-metric{background:rgba(0,0,0,.3);padding:10px;border-radius:8px;text-align:center}
-.cpc-metric-v{font-size:22px;font-weight:900;color:#fff}
-.cpc-metric-l{font-size:9px;color:#666;font-weight:700;text-transform:uppercase;margin-top:3px}
-.cpc-revenue{background:linear-gradient(135deg,rgba(0,255,0,.1),rgba(0,255,0,.04));border:1px solid rgba(0,255,0,.3);padding:14px;border-radius:8px;text-align:center}
-.cpc-revenue-v{font-size:22px;font-weight:900;color:#00ff00}
-.cpc-revenue-l{font-size:10px;color:#999;font-weight:700;text-transform:uppercase;margin-bottom:4px}
-.spy-section{background:linear-gradient(135deg,#1a1a1a,#0a1a0a);border:2px solid #00ff00;border-radius:12px;padding:25px;margin-bottom:25px}
-.spy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:15px;margin-top:20px}
-.spy-item{background:rgba(0,0,0,.5);border:1px solid #222;border-radius:10px;padding:15px;display:flex;align-items:center;gap:15px;transition:all .2s}
-.spy-item.checkout{border-color:#00ff00;background:rgba(0,255,0,.03)}
-.spy-item.sale{border-color:#fbbf24;background:rgba(251,191,36,.05)}
-.spy-avatar{width:45px;height:45px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#666;font-size:18px;flex-shrink:0}
-.spy-content{flex:1;min-width:0}
-.spy-header{display:flex;justify-content:space-between;margin-bottom:4px}
-.spy-id{font-size:13px;font-weight:900;color:#fff}
-.spy-time{font-size:10px;color:#555}
-.spy-status{font-size:12px;font-weight:700;color:#999}
-.spy-status.checkout{color:#00ff00}
-.spy-status.sale{color:#fbbf24}
+:root{
+  --red:#ef4444;--red-dim:rgba(239,68,68,.12);--red-glow:rgba(239,68,68,.35);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.1);--green-glow:rgba(34,197,94,.3);
+  --gold:#f59e0b;--gold-dim:rgba(245,158,11,.1);--gold-glow:rgba(245,158,11,.3);
+  --bg:#070709;--surface:#0f1014;--surface2:#15171d;--border:#1e2028;
+  --text:#f1f1f3;--muted:#5a5d6b;--subtle:#2a2d38;
+}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#2a2d38;border-radius:4px}
 
-/* === NOVO: barra de progresso do funil === */
-.spy-funnel{display:flex;gap:3px;margin-top:8px}
-.funnel-step{flex:1;height:4px;border-radius:2px;background:#1a1a1a}
-.funnel-step.done{background:#00cc44}
-.funnel-step.active{background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,.6);animation:pulse-step .8s infinite alternate}
-@keyframes pulse-step{0%{opacity:.6}100%{opacity:1}}
-.funnel-label{font-size:9px;color:#555;margin-top:5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.wrap{max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 
-.spy-badges{display:flex;gap:5px;margin-top:6px}
-.online-dot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 10px #00ff00}
-.checkout-badge{background:rgba(0,255,0,.1);color:#00ff00;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid #00ff00}
-.sale-badge{background:rgba(251,191,36,.1);color:#fbbf24;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid #fbbf24}
-.spy-filter{display:flex;gap:10px;margin-bottom:15px}
-.spy-filter-btn{background:#111;border:1px solid #333;color:#666;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer}
-.spy-filter-btn.active{background:rgba(0,255,0,.1);border-color:#00ff00;color:#00ff00}
-.channel-period-select{background:rgba(0,0,0,.5);border:1px solid #444;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer}
-.empty-state{text-align:center;padding:40px;grid-column:1/-1;color:#444;font-size:14px}
+/* HEADER */
+.header{background:linear-gradient(135deg,#0f0f14 0%,#1a0810 100%);border:1px solid #2a1520;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 0 40px rgba(239,68,68,.07)}
+.hb{display:flex;align-items:center;gap:14px}
+.hlogo{width:42px;height:42px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 18px var(--red-glow);flex-shrink:0}
+.htitle{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.4px}
+.hsub{font-size:11px;color:var(--muted);margin-top:2px}
+.hstatus{display:flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid rgba(34,197,94,.2);padding:7px 13px;border-radius:8px;font-size:11px;font-weight:700;color:var(--green)}
+.pdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pdot 1.5s infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* === NOVO: tag de canal na venda === */
-.channel-tag{display:inline-block;background:rgba(255,51,51,.12);border:1px solid rgba(255,51,51,.35);color:#ff6666;font-size:9px;font-weight:900;padding:2px 7px;border-radius:4px;margin-top:3px;letter-spacing:.4px;text-transform:uppercase}
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-bar{position:absolute;top:0;left:0;width:3px;height:100%}
+.kpi-icon{font-size:18px;margin-bottom:6px;display:block}
+.kpi-v{font-size:26px;font-weight:900;line-height:1;letter-spacing:-1px;color:#fff}
+.kpi-l{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
+.ctitle{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.cactions{margin-left:auto;display:flex;gap:8px}
+
+/* SEL / TABS */
+.sel{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.tabs{display:flex;gap:5px;flex-wrap:wrap}
+.tab{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 11px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit}
+.tab.active{background:var(--green-dim);border-color:rgba(34,197,94,.4);color:var(--green)}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+@media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+
+/* CMP TABLE */
+.cmp{width:100%;border-collapse:collapse}
+.cmp th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.cmp td{padding:9px 10px;font-size:13px;font-weight:700;border-bottom:1px solid #0d0e11;font-variant-numeric:tabular-nums}
+.cmp tr:last-child td{border-bottom:none}
+.cl{color:var(--muted);font-size:11px}
+.cv{color:#fff}
+.cv.hi{color:var(--green)}
+
+/* SALES LIST */
+.slist{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow-y:auto;padding-right:3px}
+.si{display:flex;align-items:center;gap:11px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px}
+.si-av{width:34px;height:34px;background:var(--gold-dim);border:1px solid rgba(245,158,11,.25);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gold);flex-shrink:0}
+.si-info{flex:1;min-width:0}
+.si-name{font-size:12px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.si-meta{font-size:9px;color:var(--muted);margin-top:2px}
+.si-ch{font-size:8px;color:var(--red);font-weight:800;text-transform:uppercase;margin-top:2px;letter-spacing:.3px}
+.si-amt{font-size:14px;font-weight:900;color:var(--gold);flex-shrink:0}
+
+/* CHART */
+.chwrap{height:240px;position:relative}
+
+/* HEATMAP */
+.hmt{width:100%;border-collapse:separate;border-spacing:3px}
+.hmt th{font-size:9px;color:var(--muted);text-transform:uppercase;padding:3px;text-align:center;font-weight:700}
+.hm-day{font-size:9px;font-weight:800;color:var(--muted);text-align:right;padding-right:7px;white-space:nowrap}
+.hmc{height:28px;border-radius:4px;text-align:center;vertical-align:middle;font-size:9px;font-weight:800}
+.hmc.e{background:rgba(255,255,255,.03)}
+.hmc.l{background:rgba(239,68,68,.18);color:rgba(255,255,255,.6);border:1px solid rgba(239,68,68,.28)}
+.hmc.m{background:rgba(245,158,11,.28);color:#fff;border:1px solid rgba(245,158,11,.4)}
+.hmc.h{background:rgba(34,197,94,.38);color:#fff;border:1px solid rgba(34,197,94,.5)}
+.hm-leg{display:flex;gap:12px;justify-content:center;margin-top:10px}
+.hm-li{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);font-weight:700}
+.hm-lc{width:9px;height:9px;border-radius:2px}
+
+/* CHANNEL CARDS */
+.ch-card{background:var(--surface2);border:2px solid var(--border);border-radius:13px;padding:16px;transition:border-color .2s}
+.ch-card.best{border-color:var(--green)}
+.ch-card.good{border-color:var(--gold)}
+.ch-card.bad{border-color:rgba(239,68,68,.25)}
+.ch-n{font-size:12px;font-weight:900;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ch-bdg{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:900;text-transform:uppercase;letter-spacing:.3px}
+.ch-bdg.best{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.ch-bdg.good{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,158,11,.3)}
+.ch-bdg.bad{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.ch-ms{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.ch-m{background:rgba(0,0,0,.25);padding:8px;border-radius:7px;text-align:center}
+.ch-mv{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.ch-ml{font-size:7px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-top:2px}
+.ch-rev{background:var(--green-dim);border:1px solid rgba(34,197,94,.2);padding:10px;border-radius:7px;text-align:center}
+.ch-rv{font-size:18px;font-weight:900;color:var(--green)}
+.ch-rl{font-size:8px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:2px}
+
+/* INSIGHTS */
+.ins-card{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:14px}
+.ins-card.warn{border-left-color:var(--gold)}
+.ins-card.danger{border-left-color:var(--red)}
+.ins-e{font-size:20px;margin-bottom:5px;display:block}
+.ins-t{font-size:9px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.ins-card.warn .ins-t{color:var(--gold)}
+.ins-card.danger .ins-t{color:var(--red)}
+.ins-v{font-size:22px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:3px}
+.ins-d{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* ONLINE HERO */
+.oh{background:linear-gradient(135deg,rgba(239,68,68,.1) 0%,rgba(239,68,68,.03) 100%);border:1px solid rgba(239,68,68,.18);border-radius:14px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.oh-num{font-size:58px;font-weight:900;color:var(--red);line-height:1;text-shadow:0 0 25px var(--red-glow);letter-spacing:-3px}
+.oh-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.oh-sub{font-size:10px;color:#2a2d38}
+.rings{position:relative;width:54px;height:54px;flex-shrink:0}
+.ring{position:absolute;border-radius:50%;border:2px solid var(--red);animation:re 2.5s infinite}
+.ring:nth-child(1){inset:0;animation-delay:0s;opacity:.55}
+.ring:nth-child(2){inset:-7px;animation-delay:.65s;opacity:.3}
+.ring:nth-child(3){inset:-14px;animation-delay:1.3s;opacity:.12}
+@keyframes re{0%{transform:scale(.8);opacity:.55}100%{transform:scale(1.35);opacity:0}}
+.ring-c{position:absolute;inset:12px;background:var(--red);border-radius:50%;box-shadow:0 0 12px var(--red-glow)}
+
+/* SPY */
+.spy-item{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:11px}
+.spy-item.checkout{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.03)}
+.spy-item.sale{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.04)}
+.spy-av{width:36px;height:36px;background:var(--subtle);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted);font-size:13px;flex-shrink:0}
+.spy-b{flex:1;min-width:0}
+.spy-row{display:flex;justify-content:space-between;align-items:center}
+.spy-id{font-size:11px;font-weight:900;color:#fff}
+.spy-t{font-size:9px;color:var(--muted)}
+.spy-st{font-size:10px;font-weight:700;color:var(--muted);margin-top:1px}
+.spy-st.checkout{color:var(--green)}
+.spy-st.sale{color:var(--gold)}
+.spy-ch{font-size:8px;color:var(--red);font-weight:800;text-transform:uppercase;margin-top:2px;letter-spacing:.3px}
+.spy-fun{display:flex;gap:2px;margin-top:6px}
+.fs{flex:1;height:3px;border-radius:2px;background:var(--subtle)}
+.fs.done{background:var(--green)}
+.fs.now{background:var(--gold);animation:fp .9s infinite alternate}
+@keyframes fp{0%{opacity:.4}100%{opacity:1}}
+.f-lbl{font-size:8px;color:var(--muted);margin-top:3px;font-weight:700;text-transform:uppercase}
+.spy-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.odot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 7px var(--green)}
+.bchk{background:var(--green-dim);color:var(--green);font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid rgba(34,197,94,.3)}
+.bsale{background:var(--gold-dim);color:var(--gold);font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid rgba(245,158,11,.3)}
+
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:12px;grid-column:1/-1}
 </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1 class="title">Alpha Method</h1>
-<p class="subtitle">Dashboard Estratégico Orgânico</p>
-</div>
-<div class="status-banner" id="status-banner">
-<div class="status-dot"></div>
-<span id="status-text">🔌 Conectando ao Firebase...</span>
-<span id="realtime-indicator" style="margin-left:auto;font-size:11px;color:#00ff00;font-weight:700;display:none">⚡ TEMPO REAL ATIVO</span>
-</div>
+<div class="wrap">
 
-<!-- Online Agora -->
-<div class="online-badge">
-<div class="online-label">Pessoas no Funil Agora</div>
-<div class="online-count" id="online-count">0</div>
-</div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="hb">
+      <div class="hlogo">⚡</div>
+      <div><div class="htitle">Alpha Method</div><div class="hsub">Dashboard Estratégico Orgânico</div></div>
+    </div>
+    <div class="hstatus"><div class="pdot"></div><span id="status-text">Conectando…</span></div>
+  </div>
 
-<!-- Inteligência de Vendas Orgânica -->
-<div class="insights-section">
-<div class="section-title">💡 Inteligência Orgânica Avançada</div>
-<div class="insights-grid" id="insights-grid"></div>
-</div>
+  <!-- ONLINE HERO -->
+  <div class="oh">
+    <div>
+      <div class="oh-lbl">Pessoas no Funil Agora</div>
+      <div class="oh-num" id="online-count">—</div>
+      <div class="oh-sub" id="online-sub">aguardando dados…</div>
+    </div>
+    <div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring-c"></div></div>
+  </div>
 
-<!-- Comparação de Períodos -->
-<div class="section">
-<div class="section-title">📅 Comparação de Períodos</div>
-<table class="comp-table" id="comparison-table">
-<thead>
-<tr>
-<th>Métrica</th>
-<th>Hoje</th>
-<th>Ontem</th>
-<th>7 Dias</th>
-<th>30 Dias</th>
-</tr>
-</thead>
-<tbody id="comparison-body"></tbody>
-</table>
-</div>
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-bar" style="background:var(--red)"></div><span class="kpi-icon">👥</span><div class="kpi-v" id="k-access">—</div><div class="kpi-l">Acessos Hoje</div></div>
+    <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><span class="kpi-icon">💰</span><div class="kpi-v" id="k-sales">—</div><div class="kpi-l">Vendas Hoje</div></div>
+    <div class="kpi"><div class="kpi-bar" style="background:var(--gold)"></div><span class="kpi-icon">💵</span><div class="kpi-v" id="k-rev">—</div><div class="kpi-l">Receita Hoje</div></div>
+    <div class="kpi"><div class="kpi-bar" style="background:#8b5cf6"></div><span class="kpi-icon">🛒</span><div class="kpi-v" id="k-chk">—</div><div class="kpi-l">Checkouts Hoje</div></div>
+    <div class="kpi"><div class="kpi-bar" style="background:#06b6d4"></div><span class="kpi-icon">📝</span><div class="kpi-v" id="k-quiz">—</div><div class="kpi-l">Quiz Completo Hoje</div></div>
+    <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><span class="kpi-icon">📈</span><div class="kpi-v" id="k-conv">—</div><div class="kpi-l">Conv. 7 Dias</div></div>
+  </div>
 
-<!-- Vendas Confirmadas -->
-<div class="sales-section">
-<div class="section-title">💰 Vendas Confirmadas (Recentes)
-<select class="channel-period-select" id="date-filter" onchange="updateSales()" style="margin-left:auto">
-<option value="today">Hoje</option>
-<option value="yesterday">Ontem</option>
-<option value="7d" selected>Últimos 7 Dias</option>
-<option value="30d">Últimos 30 Dias</option>
-</select>
-</div>
-<div class="sales-grid">
-<div class="sales-card">
-<div class="sales-card-title">Vendas ao Longo do Tempo</div>
-<div class="chart-container"><canvas id="salesTimeChart"></canvas></div>
-</div>
-<div class="sales-card">
-<div class="sales-card-title">Últimas Vendas</div>
-<div class="sales-list" id="recent-sales-list"></div>
-</div>
-</div>
-</div>
+  <!-- INSIGHTS -->
+  <div class="card">
+    <div class="ctitle">💡 Inteligência Orgânica</div>
+    <div class="ga" id="ins-grid"></div>
+  </div>
 
-<!-- Melhores Horários -->
-<div class="section">
-<div class="section-title">🔥 Melhores Horários para Vender (Heatmap)</div>
-<div id="heatmap-container"></div>
-</div>
+  <!-- COMPARAÇÃO -->
+  <div class="card">
+    <div class="ctitle">📅 Comparação de Períodos</div>
+    <table class="cmp"><thead><tr><th>Métrica</th><th>Hoje</th><th>Ontem</th><th>7 Dias</th><th>30 Dias</th></tr></thead><tbody id="cmp-body"></tbody></table>
+  </div>
 
-<!-- Horários de Pico -->
-<div class="section">
-<div class="section-title">📊 Horários de Pico (Acessos)</div>
-<div class="chart-container"><canvas id="peakHourChart"></canvas></div>
-</div>
+  <!-- VENDAS -->
+  <div class="card">
+    <div class="ctitle">💰 Vendas Confirmadas
+      <div class="cactions"><select class="sel" id="date-filter" onchange="onFilterChange()"><option value="today">Hoje</option><option value="yesterday">Ontem</option><option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option></select></div>
+    </div>
+    <div class="g2">
+      <div><div class="ctitle" style="font-size:9px;margin-bottom:10px">VENDAS NO TEMPO</div><div class="chwrap"><canvas id="salesChart"></canvas></div></div>
+      <div><div class="ctitle" style="font-size:9px;margin-bottom:10px">ÚLTIMAS VENDAS</div><div class="slist" id="sales-list"></div></div>
+    </div>
+  </div>
 
-<!-- Performance por Canal -->
-<div class="section">
-<div class="section-title">📈 Performance por Canal TikTok
-<select class="channel-period-select" id="perf-period" onchange="updateComparison()" style="margin-left:auto">
-<option value="today">Hoje</option>
-<option value="yesterday">Ontem</option>
-<option value="7d" selected>Últimos 7 Dias</option>
-<option value="30d">Últimos 30 Dias</option>
-</select>
-</div>
-<div class="channel-perf-grid" id="channel-perf-grid"></div>
-</div>
+  <!-- HEATMAP + PICO -->
+  <div class="g2">
+    <div class="card"><div class="ctitle">🔥 Heatmap de Vendas</div><div id="hm-wrap"></div></div>
+    <div class="card"><div class="ctitle">📊 Pico de Acessos (24h)</div><div class="chwrap"><canvas id="peakChart"></canvas></div></div>
+  </div>
 
-<!-- Espião de Fluxo -->
-<div class="spy-section">
-<div class="section-title">🕵️ Espião de Fluxo (Live)
-<div class="spy-filter" style="margin-left:auto">
-<button class="spy-filter-btn active" onclick="filterSpy('all', event)">TODOS</button>
-<button class="spy-filter-btn" onclick="filterSpy('online', event)">ONLINE</button>
-<button class="spy-filter-btn" onclick="filterSpy('checkout', event)">CHECKOUT</button>
-<button class="spy-filter-btn" onclick="filterSpy('sale', event)">VENDAS</button>
-</div>
-</div>
-<div class="spy-grid" id="spy-container"></div>
-</div>
+  <!-- CANAIS -->
+  <div class="card">
+    <div class="ctitle">📱 Performance por Canal TikTok
+      <div class="cactions"><select class="sel" id="ch-period" onchange="onFilterChange()"><option value="today">Hoje</option><option value="yesterday">Ontem</option><option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option></select></div>
+    </div>
+    <div class="ga" id="ch-grid"></div>
+  </div>
+
+  <!-- ESPIÃO -->
+  <div class="card">
+    <div class="ctitle">🕵️ Espião de Fluxo
+      <div class="cactions tabs" id="spy-tabs">
+        <button class="tab active" onclick="setSpy('all',this)">TODOS</button>
+        <button class="tab" onclick="setSpy('online',this)">ONLINE</button>
+        <button class="tab" onclick="setSpy('checkout',this)">CHECKOUT</button>
+        <button class="tab" onclick="setSpy('sale',this)">VENDAS</button>
+      </div>
+    </div>
+    <div class="ga" id="spy-grid"></div>
+  </div>
 
 </div>
 
@@ -219,569 +249,409 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAs-REDACTED",
-    authDomain: "alytics-metodo-alpha.firebaseapp.com",
-    projectId: "alytics-metodo-alpha",
-    storageBucket: "alytics-metodo-alpha.appspot.com",
-    messagingSenderId: "REDACTED",
-    appId: "1:REDACTED:web:REDACTED"
+const FB={apiKey:"AIzaSyAs-REDACTED",authDomain:"alytics-metodo-alpha.firebaseapp.com",projectId:"alytics-metodo-alpha",storageBucket:"alytics-metodo-alpha.appspot.com",messagingSenderId:"REDACTED",appId:"1:REDACTED:web:REDACTED"};
+const CHANNELS=['doutor-cajado','doutor-reginaldo','doutor-saude','doutor-bigode','cajado-supremo'];
+const TQ=8;
+// Janela de tempo para cruzar venda com sessão (30 minutos)
+const MATCH_WINDOW_MS = 30 * 60 * 1000;
+
+let sessions=[],sales=[],spyFilter='all',schart,pchart;
+// Cache do cruzamento venda↔sessão — reconstruído só quando os dados mudam
+let saleSessionCache = new Map(); // saleId → session
+
+let pending=false;
+const scheduleRender=()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;buildSaleSessionCache();renderAll();});};
+
+/* ─────────────────────────────────────────────
+   HELPERS BÁSICOS
+───────────────────────────────────────────── */
+const toDate=ts=>{if(!ts)return null;if(ts.toDate)return ts.toDate();if(ts.seconds)return new Date(ts.seconds*1000);if(typeof ts==='string'||typeof ts==='number')return new Date(ts);return null;};
+const isPaid=s=>s.isPaid===true||s.paid===true||['pago','paid','approved'].includes(s.status);
+const isOnline=ts=>{const d=toDate(ts);return d&&(Date.now()-d.getTime())<300000;};
+const net=(v,m)=>(m==='pix'?v*.95:v*.90);
+const ago=ts=>{const d=toDate(ts);if(!d)return'---';const s=Math.floor((Date.now()-d.getTime())/1000);if(s<60)return'agora';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h';};
+const brl=v=>'R$ '+v.toFixed(2).replace('.',',');
+const fch=ch=>(ch||'').replace(/-/g,' ').toUpperCase();
+const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+const getRange=f=>{const now=new Date(),s=new Date();if(f==='today')s.setHours(0,0,0,0);else if(f==='yesterday'){s.setDate(now.getDate()-1);s.setHours(0,0,0,0);now.setDate(now.getDate()-1);now.setHours(23,59,59,999);}else if(f==='7d')s.setDate(now.getDate()-7);else if(f==='30d')s.setDate(now.getDate()-30);return{start:s,end:now};};
+const buildMap=()=>{const m={};sessions.forEach(s=>{const id=s.sessionId||s.id;if(id)m[id]=s;});return m;};
+
+/* ─────────────────────────────────────────────
+   CAMPOS DE CANAL válidos (exclui ruído)
+───────────────────────────────────────────── */
+const CH_F=['channel','channelDomain','source','utm_source','utmSource','origin'];
+const NOISE=['undefined','desconhecido','hercules_funil','direto','direct',''];
+const cleanCh=v=>v&&!NOISE.includes(String(v).toLowerCase().trim())?v:null;
+const getChFromObj=obj=>{for(const f of CH_F){const v=cleanCh(obj[f]);if(v)return v;}return null;};
+const matchCh=(obj,ch)=>obj&&CH_F.some(f=>obj[f]&&(obj[f]===ch||String(obj[f]).includes(ch)));
+
+/* ─────────────────────────────────────────────
+   IDADE — lê do funil corrigido (answers.idade é número)
+   Também lê a resposta textual e converte
+───────────────────────────────────────────── */
+const AGE_TEXT_MAP={
+  'entre 19 e 27 anos':23,'entre 28 e 36 anos':32,
+  'mais de 36 anos':42,'acima de 36 anos':42,
+  '19 a 27':23,'28 a 36':32,'36+':42,
 };
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let sessions = [], sales = [], spyFilter = 'all', TOTAL_Q = 8, salesChart, peakChart;
-
-// --- HELPERS --- //
-const toDate = ts => {
-    if (!ts) return null;
-    if (ts.toDate) return ts.toDate();
-    if (ts.seconds) return new Date(ts.seconds * 1000);
-    if (typeof ts === 'string' || typeof ts === 'number') return new Date(ts);
-    return null;
-};
-
-const isPaidSale = s => s.isPaid === true || s.paid === true || s.status === 'pago' || s.status === 'paid' || s.status === 'approved';
-
-const hasEvent = (s, type) => {
-    if (s.currentStep === type) return true;
-    if (s.events && Array.isArray(s.events)) {
-        return s.events.some(e => e.type === type || e.name === type || e.event === type);
+const getAge=s=>{
+  if(!s)return null;
+  // 1. campo numérico direto na raiz (funil corrigido grava isso)
+  for(const f of['idade','age','userAge','user_age']){
+    const v=parseInt(s[f]);if(!isNaN(v)&&v>=10&&v<=120)return v;
+  }
+  // 2. dentro de answers
+  if(s.answers&&typeof s.answers==='object'){
+    // campo numérico explícito (funil corrigido: answers.idade = 23)
+    for(const k of['idade','age','userAge','q_idade']){
+      const v=parseInt(s.answers[k]);if(!isNaN(v)&&v>=10&&v<=120)return v;
     }
-    if (type === 'quiz_started' && (s.quizProgress > 0 || s.currentStep === 'quiz')) return true;
-    if (type === 'quiz_completed' && s.quizProgress >= TOTAL_Q) return true;
-    if (type === 'result_shown' && s.currentStep === 'result') return true;
-    return false;
+    // resposta textual da pergunta de idade (funil original)
+    const raw=s.answers['idade']||s.answers['age']||'';
+    const mapped=AGE_TEXT_MAP[raw.toLowerCase().trim()];
+    if(mapped)return mapped;
+    // varredura: qualquer número 10-120 nos valores
+    for(const val of Object.values(s.answers)){
+      // tenta mapeamento textual primeiro
+      const tm=AGE_TEXT_MAP[String(val).toLowerCase().trim()];
+      if(tm)return tm;
+      const v=parseInt(val);if(!isNaN(v)&&v>=10&&v<=120)return v;
+    }
+  }
+  return null;
 };
 
-const isOnline = ts => { const d = toDate(ts); return d && (Date.now() - d.getTime()) < 300000; };
-const isCheckout = s => hasEvent(s, 'checkout') || hasEvent(s, 'checkout_reached') || s.currentStep === 'checkout' || s.currentStep === 'payment';
-const netRev = (v, m) => m === 'pix' ? v * 0.95 : v * 0.90;
-const timeAgo = ts => {
-    const d = toDate(ts); if(!d) return '---';
-    const sec = Math.floor((Date.now() - d.getTime()) / 1000);
-    if(sec < 60) return 'agora';
-    if(sec < 3600) return Math.floor(sec/60) + 'm atrás';
-    return Math.floor(sec/3600) + 'h atrás';
-};
+/* ─────────────────────────────────────────────
+   CRUZAMENTO VENDA ↔ SESSÃO POR TEMPO
+   
+   Estratégia em cascata:
+   1. sessionId direto (se Wiapy devolver)
+   2. utm_source = sessionId (Wiapy passa sid na URL)
+   3. Sessão de checkout mais próxima ±30min no mesmo canal
+   4. Sessão de checkout mais próxima ±30min (qualquer canal)
+───────────────────────────────────────────── */
+function buildSaleSessionCache(){
+  saleSessionCache=new Map();
+  const map=buildMap();
 
-const getRange = f => {
-    const now = new Date(), start = new Date();
-    if(f==='today') start.setHours(0,0,0,0);
-    else if(f==='yesterday'){ start.setDate(now.getDate()-1); start.setHours(0,0,0,0); now.setDate(now.getDate()-1); now.setHours(23,59,59,999); }
-    else if(f==='7d') start.setDate(now.getDate()-7);
-    else if(f==='30d') start.setDate(now.getDate()-30);
-    return {start, end: now};
-};
+  sales.forEach(sale=>{
+    if(!isPaid(sale))return;
+    const saleId=sale.id;
+    const saleTime=toDate(sale.createdAt);
 
-// =====================================================
-// FIX 1 — Extrair idade de QUALQUER campo possível
-// =====================================================
-const extractAge = (session) => {
-    if (!session) return null;
+    // 1. vínculo direto por sessionId
+    const directSid=sale.sessionId||sale.externalId||sale.session_id;
+    if(directSid&&map[directSid]){saleSessionCache.set(saleId,map[directSid]);return;}
 
-    // Tenta campos diretos na raiz da sessão
-    const directFields = ['idade', 'age', 'userAge', 'user_age'];
-    for (const f of directFields) {
-        const v = parseInt(session[f]);
-        if (!isNaN(v) && v > 0) return v;
-    }
+    // 2. utm_source pode ser o sessionId (formato s_TIMESTAMP_RANDOM)
+    const utmSid=sale.utm_source||sale.utmSource;
+    if(utmSid&&map[utmSid]){saleSessionCache.set(saleId,map[utmSid]);return;}
 
-    // Tenta dentro de answers (vários formatos de chave)
-    if (session.answers && typeof session.answers === 'object') {
-        const answerKeys = [
-            'idade', 'age', 'q1', 'pergunta1', 'question1',
-            'q_idade', 'user_age', 'userAge', '0', 'first'
-        ];
-        for (const k of answerKeys) {
-            const v = parseInt(session.answers[k]);
-            if (!isNaN(v) && v > 0) return v;
-        }
-        // Varredura completa: pega o primeiro valor numérico que pareça idade (10-120)
-        for (const val of Object.values(session.answers)) {
-            const v = parseInt(val);
-            if (!isNaN(v) && v >= 10 && v <= 120) return v;
-        }
-    }
+    if(!saleTime)return;
 
-    // Tenta dentro de responses
-    if (session.responses && typeof session.responses === 'object') {
-        for (const val of Object.values(session.responses)) {
-            const v = parseInt(val);
-            if (!isNaN(v) && v >= 10 && v <= 120) return v;
-        }
-    }
+    // 3 & 4. cruzamento por tempo
+    // Candidatos: sessões que foram ao checkout dentro da janela de tempo
+    const saleChannel=getChFromObj(sale);
+    let best=null,bestDiff=Infinity;
 
-    return null;
-};
+    sessions.forEach(sess=>{
+      // pega o timestamp do checkout desta sessão
+      let chkTime=null;
+      if(sess.events&&typeof sess.events==='object'&&!Array.isArray(sess.events)){
+        chkTime=toDate(sess.events['checkout'])||toDate(sess.events['checkout_reached']);
+      }
+      // fallback: usa lastActivity se a sessão está em checkout
+      if(!chkTime&&(sess.currentStep==='checkout'||sess.currentStep==='payment')){
+        chkTime=toDate(sess.lastActivity);
+      }
+      if(!chkTime)return;
 
-// =====================================================
-// FIX 2 — Extrair canal de QUALQUER campo possível
-// =====================================================
-const extractChannel = (sale, sessionMap) => {
-    // Tenta direto na venda
-    const directSaleFields = ['channel', 'channelDomain', 'source', 'utm_source', 'utmSource', 'origin'];
-    for (const f of directSaleFields) {
-        if (sale[f] && sale[f] !== 'undefined') return sale[f];
-    }
+      const diff=Math.abs(saleTime.getTime()-chkTime.getTime());
+      if(diff>MATCH_WINDOW_MS)return; // fora da janela
 
-    // Tenta achar a sessão vinculada
-    const sid = sale.sessionId || sale.externalId || sale.session_id;
-    const session = sid ? sessionMap[sid] : null;
+      // prefere sessão do mesmo canal
+      const sessChannel=getChFromObj(sess);
+      const sameChannel=saleChannel&&sessChannel&&(sessChannel===saleChannel||sessChannel.includes(saleChannel)||saleChannel.includes(sessChannel));
+      const score=sameChannel?diff:diff+MATCH_WINDOW_MS; // penaliza canal diferente
 
-    if (session) {
-        const directSessionFields = ['channel', 'channelDomain', 'source', 'utm_source', 'utmSource', 'origin', 'domain'];
-        for (const f of directSessionFields) {
-            if (session[f] && session[f] !== 'undefined') return session[f];
-        }
-    }
-
-    return 'Direto';
-};
-
-const formatChannel = ch => ch.replace(/-/g, ' ').toUpperCase();
-
-// =====================================================
-// FIX 3 — Mapear currentStep para passo do funil
-// =====================================================
-const FUNNEL_STEPS = [
-    { key: 'entry',          label: 'Entrou',        steps: ['entry', 'landing', 'home', null, undefined, ''] },
-    { key: 'quiz_started',   label: 'Iniciou Quiz',  steps: ['quiz', 'quiz_started'] },
-    { key: 'quiz_progress',  label: 'No Quiz',       steps: ['quiz_progress', 'answering'] },
-    { key: 'quiz_completed', label: 'Terminou Quiz', steps: ['quiz_completed', 'result', 'result_shown'] },
-    { key: 'checkout',       label: 'Checkout',      steps: ['checkout', 'checkout_reached', 'payment'] },
-    { key: 'sale',           label: 'Comprou',       steps: ['sale', 'paid', 'completed'] },
-];
-
-const getFunnelIndex = (session, hasSale) => {
-    if (hasSale) return 5;
-    if (isCheckout(session)) return 4;
-    if (session.quizProgress >= TOTAL_Q || hasEvent(session, 'quiz_completed')) return 3;
-    if (session.quizProgress > 0 || hasEvent(session, 'quiz_started') || session.currentStep === 'quiz') return Math.max(1, Math.min(2, 1 + Math.floor(((session.quizProgress || 1) / TOTAL_Q) * 2)));
-    return 0;
-};
-
-const getFunnelLabel = (session, hasSale) => {
-    if (hasSale) return '💰 COMPROU!';
-    if (isCheckout(session)) return '💳 No Checkout';
-    if (session.quizProgress >= TOTAL_Q || hasEvent(session, 'quiz_completed')) return '✅ Vendo Resultado';
-    if (session.quizProgress > 0) return `📝 Quiz — ${session.quizProgress}/${TOTAL_Q} respostas`;
-    if (hasEvent(session, 'quiz_started') || session.currentStep === 'quiz') return '📝 Iniciou Quiz';
-    const raw = session.currentStep || '';
-    if (raw) return `📍 ${raw}`;
-    return '👋 Entrou no Funil';
-};
-
-// --- FUNÇÕES DE RENDERIZAÇÃO --- //
-
-function buildSessionMap() {
-    const map = {};
-    sessions.forEach(s => {
-        const sid = s.sessionId || s.id;
-        if (sid) map[sid] = s;
-    });
-    return map;
-}
-
-function updateStats() {
-    const online = sessions.filter(s => isOnline(s.lastActivity)).length;
-    document.getElementById('online-count').innerText = online;
-    document.getElementById('status-text').innerText = '🟢 Conectado e Sincronizado';
-    document.getElementById('realtime-indicator').style.display = 'block';
-}
-
-function updateSales() {
-    const filter = document.getElementById('date-filter').value;
-    const range = getRange(filter);
-    const sessionMap = buildSessionMap();
-
-    const filtered = sales.filter(s => {
-        const d = toDate(s.createdAt);
-        return d && d >= range.start && d <= range.end && isPaidSale(s);
-    }).sort((a,b) => toDate(b.createdAt) - toDate(a.createdAt));
-
-    const listEl = document.getElementById('recent-sales-list');
-    if(filtered.length === 0) {
-        listEl.innerHTML = '<div class="empty-state">Nenhuma venda no período.</div>';
-    } else {
-        listEl.innerHTML = filtered.slice(0, 10).map(s => {
-            // FIX 2: usa extractChannel
-            const channelRaw = extractChannel(s, sessionMap);
-            const channelDisplay = formatChannel(channelRaw);
-
-            // FIX 1: usa extractAge
-            const sid = s.sessionId || s.externalId;
-            const session = sessionMap[sid];
-            const age = extractAge(session);
-            const ageDisplay = age ? `${age} anos` : 'idade n/d';
-
-            return `
-                <div class="sale-item">
-                    <div class="sale-info">
-                        <div class="sale-name">${s.customerName || 'Cliente Alpha'} (${ageDisplay})</div>
-                        <div class="sale-meta">${timeAgo(s.createdAt)} • ${s.paymentMethod?.toUpperCase() || 'PIX'}</div>
-                        <div class="channel-tag">📡 ${channelDisplay}</div>
-                    </div>
-                    <div class="sale-amount">R$ ${netRev(s.amount || 0, s.paymentMethod).toFixed(2)}</div>
-                </div>
-            `;
-        }).join('');
-    }
-    updateSalesChart(filter);
-    updateHeatmap();
-}
-
-function updateSalesChart(filter){
-    const range=getRange(filter), byDay={};
-    sales.forEach(s=>{
-        if(!s.createdAt || !isPaidSale(s)) return;
-        const d=toDate(s.createdAt);
-        if(d && d>=range.start && d<=range.end){
-            const k=d.toLocaleDateString('pt-BR');
-            byDay[k]=(byDay[k]||0)+1;
-        }
-    });
-    const days=[], counts=[], cur=new Date(range.start);
-    while(cur<=range.end){
-        const k=cur.toLocaleDateString('pt-BR');
-        days.push(k); counts.push(byDay[k]||0);
-        cur.setDate(cur.getDate()+1);
-    }
-    const ctx=document.getElementById('salesTimeChart');
-    if(!ctx) return;
-    if(salesChart) salesChart.destroy();
-    salesChart=new Chart(ctx.getContext('2d'),{
-        type:'line',
-        data:{
-            labels:days,
-            datasets:[{
-                label:'Vendas',
-                data:counts,
-                borderColor:'#fbbf24',
-                backgroundColor:'rgba(251,191,36,.1)',
-                borderWidth:3,
-                fill:true,
-                tension:.4,
-                pointRadius:4,
-                pointBackgroundColor:'#fbbf24'
-            }]
-        },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            plugins:{legend:{display:false}},
-            scales:{
-                x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#666',font:{size:10}}},
-                y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#666',font:{size:10},stepSize:1}}
-            }
-        }
-    });
-}
-
-function updateHeatmap(){
-    const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'], hours=['00h','04h','08h','12h','16h','20h'], data={};
-    days.forEach(d=>{ data[d]={}; hours.forEach(h=>{data[d][h]=0;}); });
-    sales.forEach(s=>{
-        if(!s.createdAt || !isPaidSale(s)) return;
-        const sd=toDate(s.createdAt); if(!sd) return;
-        const day=days[sd.getDay()], h=sd.getHours(), r=h<4?'00h':h<8?'04h':h<12?'08h':h<16?'12h':h<20?'16h':'20h';
-        data[day][r]++;
-    });
-    let max=0; Object.values(data).forEach(d=>Object.values(d).forEach(v=>{if(v>max)max=v;}));
-    const el=document.getElementById('heatmap-container'); if(!el) return;
-    let html='<table class="heatmap-table"><thead><tr><th>Dia</th>'+hours.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
-    days.forEach(d=>{
-        html+=`<tr><td class="day-label">${d}</td>`;
-        hours.forEach(h=>{
-            const v=data[d][h], cls=max>0&&v>0?(v/max>=.7?'high':v/max>=.3?'medium':'low'):'empty';
-            html+=`<td class="heatmap-cell ${cls}" title="${d} ${h}: ${v} vendas">${v}</td>`;
-        });
-        html+='</tr>';
-    });
-    html+='</tbody></table><div class="heatmap-legend"><div class="heatmap-legend-item"><div class="heatmap-legend-color" style="background:rgba(34,197,94,.45)"></div><span>🟢 Alto</span></div><div class="heatmap-legend-item"><div class="heatmap-legend-color" style="background:rgba(251,191,36,.35)"></div><span>🟡 Médio</span></div><div class="heatmap-legend-item"><div class="heatmap-legend-color" style="background:rgba(239,68,68,.25)"></div><span>🔴 Baixo</span></div></div>';
-    el.innerHTML=html;
-}
-
-function updatePeakChart(){
-    const now=new Date(), labels=[], byH={};
-    for(let i=0;i<24;i++) labels.push(new Date(now.getTime()+i*3600000).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}));
-    sessions.forEach(s=>{
-        if(!s.enteredAt) return;
-        const d=toDate(s.enteredAt); if(!d) return;
-        const h=d.getHours(); if(!byH[h]) byH[h]=new Set();
-        byH[h].add(s.sessionId||s.id);
-    });
-    const data=labels.map((_,i)=>{ const h=new Date(now.getTime()+i*3600000).getHours(); return byH[h]?byH[h].size:0; });
-    const ctx=document.getElementById('peakHourChart').getContext('2d');
-    if(peakChart) peakChart.destroy();
-    peakChart=new Chart(ctx,{
-        type:'line',
-        data:{
-            labels,
-            datasets:[{
-                label:'Visitantes',
-                data,
-                borderColor:'#ff3333',
-                backgroundColor:'rgba(255,51,51,.1)',
-                borderWidth:3,
-                fill:true,
-                tension:.4,
-                pointRadius:4,
-                pointBackgroundColor:'#ff3333'
-            }]
-        },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            plugins:{legend:{display:false}},
-            scales:{
-                x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#666',font:{size:10}}},
-                y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#666',font:{size:10},stepSize:1}}
-            }
-        }
-    });
-}
-
-function updateComparison() {
-    const el = document.getElementById('comparison-body');
-    const periods = ['today', 'yesterday', '7d', '30d'];
-    const metrics = [
-        { n: 'Acessos', fn: s => true, type: 'sessions' },
-        { n: 'Iniciou Quiz', fn: s => hasEvent(s, 'quiz_started'), type: 'sessions' },
-        { n: 'Completou Quiz', fn: s => hasEvent(s, 'quiz_completed'), type: 'sessions' },
-        { n: 'Checkout', fn: s => isCheckout(s), type: 'sessions' },
-        { n: 'Vendas', fn: s => isPaidSale(s), type: 'sales' }
-    ];
-
-    el.innerHTML = metrics.map(m => {
-        const vals = periods.map(p => {
-            const range = getRange(p);
-            const source = m.type === 'sales' ? sales : sessions;
-            const dateField = m.type === 'sales' ? 'createdAt' : 'enteredAt';
-            return source.filter(s => {
-                const d = toDate(s[dateField] || s.timestamp || s.lastActivity);
-                return d && d >= range.start && d <= range.end && m.fn(s);
-            }).length;
-        });
-        return `<tr><td class="comp-label">${m.n}</td>${vals.map(v => `<td class="comp-val">${v}</td>`).join('')}</tr>`;
-    }).join('');
-    renderChannelPerf();
-}
-
-function renderChannelPerf() {
-    const el = document.getElementById('channel-perf-grid');
-    const period = document.getElementById('perf-period').value;
-    const range = getRange(period);
-    const sessionMap = buildSessionMap();
-    const CHANNELS = ['doutor-cajado', 'doutor-reginaldo', 'doutor-saude', 'doutor-bigode', 'cajado-supremo'];
-
-    const matchChannel = (obj, ch) => {
-        const fields = ['channel', 'channelDomain', 'source', 'utmSource', 'utm_source', 'origin', 'domain'];
-        return fields.some(f => obj[f] && (obj[f] === ch || String(obj[f]).includes(ch)));
-    };
-    
-    const data = CHANNELS.map(ch => {
-        const sCh = sessions.filter(s => {
-            const d = toDate(s.enteredAt || s.lastActivity);
-            return d && d >= range.start && d <= range.end && matchChannel(s, ch);
-        });
-        const cCh = sCh.filter(s => isCheckout(s));
-        const vCh = sales.filter(s => {
-            const d = toDate(s.createdAt);
-            if (!d || d < range.start || d > range.end || !isPaidSale(s)) return false;
-            if (matchChannel(s, ch)) return true;
-            // FIX 2: verifica também via sessão vinculada
-            const sid = s.sessionId || s.externalId;
-            const session = sessionMap[sid];
-            return session && matchChannel(session, ch);
-        });
-        const rev = vCh.reduce((sum, s) => sum + netRev(s.amount || 0, s.paymentMethod), 0);
-        return { id: ch, name: formatChannel(ch), sessions: sCh.length, checkouts: cCh.length, sales: vCh.length, revenue: rev };
-    }).sort((a,b) => b.revenue - a.revenue);
-
-    el.innerHTML = data.map(d => `
-        <div class="channel-perf-card ${d.sales > 5 ? 'best' : d.sales > 0 ? 'good' : 'bad'}">
-            <div class="cpc-header"><div class="cpc-name">${d.name}</div></div>
-            <div class="cpc-metrics">
-                <div class="cpc-metric"><div class="cpc-metric-v">${d.sessions}</div><div class="cpc-metric-l">Acessos</div></div>
-                <div class="cpc-metric"><div class="cpc-metric-v">${d.checkouts}</div><div class="cpc-metric-l">Checkouts</div></div>
-                <div class="cpc-metric"><div class="cpc-metric-v">${d.sales}</div><div class="cpc-metric-l">Vendas</div></div>
-            </div>
-            <div class="cpc-revenue"><div class="cpc-revenue-l">Faturamento Líquido</div><div class="cpc-revenue-v">R$ ${d.revenue.toFixed(2)}</div></div>
-        </div>
-    `).join('');
-}
-
-function updateInsights() {
-    const el = document.getElementById('insights-grid');
-    const range7d = getRange('7d');
-    const sessionMap = buildSessionMap();
-    const s7d = sessions.filter(s => { const d = toDate(s.enteredAt || s.lastActivity); return d && d >= range7d.start; });
-    const v7d = sales.filter(s => { const d = toDate(s.createdAt); return d && d >= range7d.start && isPaidSale(s); });
-    
-    const tS = s7d.length, tSales = v7d.length, tChk = s7d.filter(s => isCheckout(s)).length;
-    const cards = [];
-    
-    const v1000 = tS > 0 ? (tSales / tS * 1000).toFixed(1) : 0;
-    cards.push({type:'great', icon:'📈', title:'Vendas por 1000 Acessos', value: v1000, desc: `Você gera <strong>${v1000} vendas</strong> a cada 1000 acessos orgânicos.`});
-
-    const abandonment = tChk > 0 ? ((tChk - tSales) / tChk * 100).toFixed(1) : 0;
-    cards.push({type: abandonment > 50 ? 'danger' : 'warn', icon:'🛒', title:'Abandono de Checkout', value: `${abandonment}%`, desc: `<strong>${abandonment}%</strong> das pessoas que chegam ao checkout não finalizam a compra.`});
-
-    const tQS = s7d.filter(s => hasEvent(s, 'quiz_started')).length;
-    const tQC = s7d.filter(s => hasEvent(s, 'quiz_completed')).length;
-    const ret = tQS > 0 ? (tQC/tQS*100).toFixed(1) : 0;
-    cards.push({type: ret > 60 ? 'great' : 'warn', icon:'📝', title:'Retenção do Quiz', value: `${ret}%`, desc: `<strong>${ret}%</strong> dos que iniciam o quiz chegam até o final.`});
-
-    const totalRev = v7d.reduce((sum, s) => sum + netRev(s.amount || 0, s.paymentMethod), 0);
-    const ticket = tSales > 0 ? (totalRev / tSales).toFixed(2) : 0;
-    cards.push({type:'great', icon:'💲', title:'Ticket Médio Líquido', value: `R$ ${ticket}`, desc: `Seu faturamento médio por venda é de <strong>R$ ${ticket}</strong>.`});
-
-    const proj = (totalRev / 7 * 30).toFixed(2);
-    cards.push({type:'great', icon:'🔮', title:'Projeção de Faturamento', value: `R$ ${proj}`, desc: `Baseado nos últimos 7 dias, sua projeção é de <strong>R$ ${proj}</strong> este mês.`});
-    
-    // FIX 1 — Usa extractAge em vez de só session.answers.idade
-    let totalAge = 0, ageCount = 0;
-    v7d.forEach(s => {
-        const sid = s.sessionId || s.externalId;
-        const session = sessionMap[sid];
-        const age = extractAge(session);
-        if (age !== null) { totalAge += age; ageCount++; }
-    });
-    const avgAge = ageCount > 0 ? (totalAge / ageCount).toFixed(1) : '---';
-    const ageType = ageCount > 0 ? 'great' : 'warn';
-    cards.push({type: ageType, icon:'👴', title:'Idade Média Compradores', value: `${avgAge} anos`, desc: ageCount > 0 ? `O perfil médio do seu comprador pagante é de <strong>${avgAge} anos</strong> (${ageCount} amostras).` : 'Nenhuma resposta de idade encontrada. Verifique o campo <code>idade</code> no Firestore.'});
-
-    const CHANNELS = ['doutor-cajado', 'doutor-reginaldo', 'doutor-saude', 'doutor-bigode', 'cajado-supremo'];
-    const matchChannel = (obj, ch) => {
-        const fields = ['channel', 'channelDomain', 'source', 'utmSource', 'utm_source', 'origin', 'domain'];
-        return fields.some(f => obj[f] && (obj[f] === ch || String(obj[f]).includes(ch)));
-    };
-    const chData = CHANNELS.map(ch => {
-        const sCh = s7d.filter(s => matchChannel(s, ch));
-        const vCh = v7d.filter(s => {
-            if (matchChannel(s, ch)) return true;
-            const sid = s.sessionId || s.externalId;
-            const session = sessionMap[sid];
-            return session && matchChannel(session, ch);
-        });
-        return { id: ch, conv: sCh.length > 0 ? (vCh.length / sCh.length * 100) : 0, sales: vCh.length, chk: sCh.filter(s => isCheckout(s)).length };
+      if(score<bestDiff){bestDiff=score;best=sess;}
     });
 
-    const bestConv = [...chData].sort((a,b) => b.conv - a.conv)[0];
-    if(bestConv && bestConv.conv > 0) {
-        cards.push({type:'great', icon:'🏆', title:'Melhor Canal de Conversão', value: formatChannel(bestConv.id), desc: `O canal <strong>${bestConv.id}</strong> tem a melhor taxa de fechamento (${bestConv.conv.toFixed(1)}%).`});
-    }
-
-    const mostHot = [...chData].sort((a,b) => b.chk - a.chk)[0];
-    if(mostHot && mostHot.chk > 0) {
-        cards.push({type:'great', icon:'🔥', title:'Canal Mais Quente', value: formatChannel(mostHot.id), desc: `O canal <strong>${mostHot.id}</strong> é o que mais leva pessoas ao checkout.`});
-    }
-
-    el.innerHTML = cards.map(c => `
-        <div class="insight-card ${c.type}">
-            <div class="insight-icon">${c.icon}</div>
-            <div class="insight-title">${c.title}</div>
-            <div class="insight-value">${c.value}</div>
-            <div class="insight-desc">${c.desc}</div>
-        </div>
-    `).join('');
+    if(best)saleSessionCache.set(saleId,best);
+  });
 }
 
-window.filterSpy = (f, evt) => {
-    spyFilter = f;
-    document.querySelectorAll('.spy-filter-btn').forEach(b => b.classList.remove('active'));
-    if(evt?.target) evt.target.classList.add('active');
-    renderSpy();
+/* Retorna sessão vinculada a uma venda (usa cache) */
+const getSessForSale=sale=>saleSessionCache.get(sale.id)||null;
+
+/* Retorna canal resolvido de uma venda */
+const resolveChForSale=sale=>{
+  const direct=getChFromObj(sale);if(direct)return direct;
+  const sess=getSessForSale(sale);
+  if(sess)return getChFromObj(sess)||null;
+  return null;
 };
 
-// FIX 3 — Espião com barra de progresso do funil em tempo real
-function renderSpy() {
-    const el = document.getElementById('spy-container');
-    const sessionMap = buildSessionMap();
-    const unique = sessions.filter((v, i, a) => a.findIndex(t => (t.sessionId || t.id) === (v.sessionId || v.id)) === i);
-    let list = unique;
-    if (spyFilter === 'online') list = unique.filter(s => isOnline(s.lastActivity));
-    if (spyFilter === 'checkout') list = unique.filter(s => isCheckout(s));
-    if (spyFilter === 'sale') list = unique.filter(s => sales.some(x => isPaidSale(x) && (x.sessionId === (s.sessionId || s.id))));
-    list = list.sort((a,b) => toDate(b.lastActivity) - toDate(a.lastActivity)).slice(0, 50);
-    
-    if (list.length === 0) {
-        el.innerHTML = '<div class="empty-state">🔍 Nenhum lead encontrado.</div>';
-        return;
-    }
-    el.innerHTML = list.map(s => {
-        const online = isOnline(s.lastActivity);
-        const sid = s.sessionId || s.id;
-        const shortId = sid.substr(-6).toUpperCase();
-        const chk = isCheckout(s);
-        const sale = sales.find(x => isPaidSale(x) && (x.sessionId === sid));
-        const hasSale = !!sale;
-        const net = hasSale ? netRev(sale.amount || 0, sale.paymentMethod).toFixed(2) : 0;
+/* ─────────────────────────────────────────────
+   FUNIL
+───────────────────────────────────────────── */
+const FSTEPS=['Entrou','Iniciou','Respondendo','Resultado','Checkout','Comprou'];
+const hasEv=(s,t)=>{
+  if(s.currentStep===t)return true;
+  if(s.events&&typeof s.events==='object'){
+    if(Array.isArray(s.events))return s.events.some(e=>e.type===t||e.name===t);
+    return t in s.events;
+  }
+  if(t==='quiz_started'&&(s.quizProgress>0||s.currentStep==='quiz'))return true;
+  if(t==='quiz_completed'&&s.quizProgress>=TQ)return true;
+  return false;
+};
+const isChk=s=>hasEv(s,'checkout')||hasEv(s,'checkout_reached')||['checkout','payment'].includes(s.currentStep);
+const fIdx=(s,hs)=>{if(hs)return 5;if(isChk(s))return 4;if(s.quizProgress>=TQ||hasEv(s,'quiz_completed'))return 3;if(s.quizProgress>0)return 2;if(hasEv(s,'quiz_started')||s.currentStep==='quiz')return 1;return 0;};
+const fLabel=(s,hs)=>{if(hs)return'💰 COMPROU!';if(isChk(s))return'💳 No Checkout';if(s.quizProgress>=TQ||hasEv(s,'quiz_completed'))return'✅ Vendo Resultado';if(s.quizProgress>0)return`📝 Quiz ${s.quizProgress}/${TQ}`;if(hasEv(s,'quiz_started')||s.currentStep==='quiz')return'📝 Iniciou Quiz';return'👋 Entrou no Funil';};
 
-        // FIX 3: status com passo real do funil
-        const statusLabel = getFunnelLabel(s, hasSale);
-        const funnelIdx = getFunnelIndex(s, hasSale);
-
-        // Barra de progresso — 6 passos
-        const funnelBar = FUNNEL_STEPS.map((step, i) => {
-            const cls = i < funnelIdx ? 'done' : i === funnelIdx ? 'active' : '';
-            return `<div class="funnel-step ${cls}" title="${step.label}"></div>`;
-        }).join('');
-
-        // Canal da sessão
-        const channelRaw = extractChannel(s, sessionMap);
-        const channelDisplay = formatChannel(channelRaw !== 'Direto' ? channelRaw : (s.channel || s.channelDomain || ''));
-        const channelTag = channelDisplay && channelDisplay !== 'DIRETO' && channelDisplay !== ''
-            ? `<div class="channel-tag">📡 ${channelDisplay}</div>` : '';
-
-        return `
-            <div class="spy-item ${hasSale ? 'sale' : chk ? 'checkout' : ''}">
-                <div class="spy-avatar">${shortId.charAt(0)}</div>
-                <div class="spy-content">
-                    <div class="spy-header">
-                        <div class="spy-id">Lead #${shortId}</div>
-                        <div class="spy-time">${timeAgo(s.lastActivity)}</div>
-                    </div>
-                    <div class="spy-status ${hasSale ? 'sale' : chk ? 'checkout' : ''}">${statusLabel}</div>
-                    ${channelTag}
-                    <div class="spy-funnel">${funnelBar}</div>
-                    <div class="funnel-label">${FUNNEL_STEPS[funnelIdx]?.label || 'Funil'} · passo ${funnelIdx + 1}/6</div>
-                </div>
-                <div class="spy-badges">
-                    ${online && !hasSale ? '<div class="online-dot"></div>' : ''}
-                    ${chk && !hasSale ? '<div class="checkout-badge">CHECKOUT</div>' : ''}
-                    ${hasSale ? `<div class="sale-badge">R$ ${net}</div>` : ''}
-                </div>
-            </div>
-        `;
-    }).join('');
+/* ─────────────────────────────────────────────
+   RENDER ALL
+───────────────────────────────────────────── */
+function renderAll(){
+  renderKPIs();renderIns();renderCmp();
+  renderSalesList();renderSalesChart();
+  renderHM();renderPeak();
+  renderCh();renderSpy();
 }
 
-// --- INICIALIZAÇÃO --- //
-
-function updateAll() {
-    updateStats();
-    updateSales();
-    updatePeakChart();
-    updateComparison();
-    updateInsights();
-    renderSpy();
+/* KPIs */
+function renderKPIs(){
+  const rt=getRange('today'),r7=getRange('7d');
+  const ts=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=rt.start&&d<=rt.end;});
+  const tv=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=rt.start&&d<=rt.end&&isPaid(s);});
+  const rev=tv.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
+  const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
+  set('k-access',ts.length);set('k-sales',tv.length);set('k-rev',brl(rev));
+  set('k-chk',ts.filter(s=>isChk(s)).length);
+  set('k-quiz',ts.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length);
+  set('k-conv',s7.length>0?(v7.length/s7.length*100).toFixed(1)+'%':'0%');
+  set('online-count',sessions.filter(s=>isOnline(s.lastActivity)).length);
+  set('online-sub',`${sessions.length} sessões · ${saleSessionCache.size} vendas vinculadas`);
+  set('status-text','🟢 Sincronizado em tempo real');
 }
 
-onSnapshot(collection(db, "sessions"), snap => {
-    sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    updateAll();
-});
+/* INSIGHTS */
+function renderIns(){
+  const r7=getRange('7d');
+  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
+  const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
+  const tS=s7.length,tV=v7.length,tC=s7.filter(s=>isChk(s)).length;
+  const rev=v7.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const cards=[];
 
-onSnapshot(collection(db, "sales"), snap => {
-    sales = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    updateAll();
-});
+  const v1k=tS>0?(tV/tS*1000).toFixed(1):0;
+  cards.push({t:'',e:'📈',tl:'Vendas / 1000 Acessos',v:v1k,d:`<strong>${v1k}</strong> vendas por 1000 acessos orgânicos`});
 
-setInterval(updateAll, 1000);
+  const abn=tC>0?((tC-tV)/tC*100).toFixed(1):0;
+  cards.push({t:abn>50?'danger':'warn',e:'🛒',tl:'Abandono de Checkout',v:`${abn}%`,d:`<strong>${abn}%</strong> chegam ao checkout mas não finalizam`});
 
+  const tQS=s7.filter(s=>hasEv(s,'quiz_started')||s.quizProgress>0).length;
+  const tQC=s7.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length;
+  const ret=tQS>0?(tQC/tQS*100).toFixed(1):0;
+  cards.push({t:ret>60?'':'warn',e:'📝',tl:'Retenção do Quiz',v:`${ret}%`,d:`<strong>${ret}%</strong> chegam ao final do quiz`});
+
+  const tick=tV>0?(rev/tV).toFixed(2):0;
+  cards.push({t:'',e:'💲',tl:'Ticket Médio Líquido',v:brl(parseFloat(tick)),d:`Média por venda nos últimos 7 dias`});
+  cards.push({t:'',e:'🔮',tl:'Projeção Mensal',v:brl(rev/7*30),d:`Projeção baseada nos últimos 7 dias`});
+
+  // IDADE — usa getSessForSale (cruzamento por tempo) + AGE_TEXT_MAP
+  let totAge=0,ageCnt=0;
+  v7.forEach(sale=>{
+    const sess=getSessForSale(sale);
+    const a=getAge(sess);
+    if(a!==null){totAge+=a;ageCnt++;}
+  });
+  const avgAge=ageCnt>0?(totAge/ageCnt).toFixed(1):'---';
+  cards.push({
+    t:ageCnt>0?'':'warn',e:'👴',tl:'Idade Média Compradores',
+    v:`${avgAge} anos`,
+    d:ageCnt>0
+      ?`<strong>${avgAge} anos</strong> média · ${ageCnt} de ${tV} vendas com sessão vinculada`
+      :`Sessões ainda não vinculadas — aguarde novos dados ou publique o funil corrigido`
+  });
+
+  // Melhor canal (usa resolveChForSale)
+  const chConv=CHANNELS.map(ch=>{
+    const sc=s7.filter(s=>matchCh(s,ch));
+    const vc=v7.filter(s=>{
+      const c=resolveChForSale(s);
+      return c&&(c===ch||c.includes(ch));
+    });
+    return{ch,conv:sc.length>0?vc.length/sc.length*100:0,sales:vc.length};
+  });
+  const best=[...chConv].sort((a,b)=>b.conv-a.conv)[0];
+  if(best&&best.conv>0) cards.push({t:'',e:'🏆',tl:'Melhor Canal',v:fch(best.ch),d:`Conv. <strong>${best.conv.toFixed(1)}%</strong> · ${best.sales} vendas`});
+
+  const el=document.getElementById('ins-grid');if(!el)return;
+  el.innerHTML=cards.map(c=>`<div class="ins-card ${c.t}"><span class="ins-e">${c.e}</span><div class="ins-t">${c.tl}</div><div class="ins-v">${c.v}</div><div class="ins-d">${c.d}</div></div>`).join('');
+}
+
+/* COMPARISON */
+function renderCmp(){
+  const periods=['today','yesterday','7d','30d'];
+  const metrics=[
+    {n:'Acessos',fn:s=>true,src:'sessions',df:'enteredAt'},
+    {n:'Iniciou Quiz',fn:s=>hasEv(s,'quiz_started')||s.quizProgress>0,src:'sessions',df:'enteredAt'},
+    {n:'Completou Quiz',fn:s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed'),src:'sessions',df:'enteredAt'},
+    {n:'Checkout',fn:s=>isChk(s),src:'sessions',df:'enteredAt'},
+    {n:'Vendas',fn:s=>isPaid(s),src:'sales',df:'createdAt'},
+  ];
+  const b=document.getElementById('cmp-body');if(!b)return;
+  b.innerHTML=metrics.map(mt=>{
+    const vals=periods.map(p=>{const r=getRange(p),arr=mt.src==='sales'?sales:sessions;return arr.filter(s=>{const d=toDate(s[mt.df]||s.lastActivity);return d&&d>=r.start&&d<=r.end&&mt.fn(s);}).length;});
+    return`<tr><td class="cl">${mt.n}</td>${vals.map((v,i)=>`<td class="cv ${i===0&&v>0?'hi':''}">${v}</td>`).join('')}</tr>`;
+  }).join('');
+}
+
+/* SALES LIST */
+function renderSalesList(){
+  const f=document.getElementById('date-filter')?.value||'7d',r=getRange(f);
+  const list=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r.start&&d<=r.end&&isPaid(s);}).sort((a,b)=>toDate(b.createdAt)-toDate(a.createdAt));
+  const el=document.getElementById('sales-list');if(!el)return;
+  if(!list.length){el.innerHTML='<div class="empty">Nenhuma venda no período</div>';return;}
+  el.innerHTML=list.slice(0,15).map(sale=>{
+    const sess=getSessForSale(sale);
+    const age=getAge(sess);
+    const ch=resolveChForSale(sale);
+    const linked=!!sess;
+    return`<div class="si">
+      <div class="si-av">${(sale.customerName||'?').charAt(0).toUpperCase()}</div>
+      <div class="si-info">
+        <div class="si-name">${sale.customerName||'Cliente Alpha'}${age?` · ${age}a`:''}</div>
+        <div class="si-meta">${ago(sale.createdAt)} · ${(sale.paymentMethod||'PIX').toUpperCase()}${linked?'':' · sem sessão'}</div>
+        ${ch?`<div class="si-ch">📡 ${fch(ch)}</div>`:''}
+      </div>
+      <div class="si-amt">${brl(net(sale.amount||0,sale.paymentMethod))}</div>
+    </div>`;
+  }).join('');
+}
+
+/* SALES CHART */
+function renderSalesChart(){
+  const f=document.getElementById('date-filter')?.value||'7d',r=getRange(f),byD={};
+  sales.forEach(s=>{if(!isPaid(s))return;const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end)return;const k=d.toLocaleDateString('pt-BR');byD[k]=(byD[k]||0)+1;});
+  const days=[],counts=[],cur=new Date(r.start);
+  while(cur<=r.end){const k=cur.toLocaleDateString('pt-BR');days.push(k);counts.push(byD[k]||0);cur.setDate(cur.getDate()+1);}
+  const ctx=document.getElementById('salesChart');if(!ctx)return;
+  if(schart)schart.destroy();
+  schart=new Chart(ctx.getContext('2d'),{type:'line',data:{labels:days,datasets:[{label:'Vendas',data:counts,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.07)',borderWidth:2,fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#f59e0b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
+}
+
+/* HEATMAP */
+function renderHM(){
+  const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],hrs=['00h','04h','08h','12h','16h','20h'],data={};
+  days.forEach(d=>{data[d]={};hrs.forEach(h=>{data[d][h]=0;});});
+  sales.forEach(s=>{if(!isPaid(s))return;const d=toDate(s.createdAt);if(!d)return;const day=days[d.getDay()],h=d.getHours(),sl=h<4?'00h':h<8?'04h':h<12?'08h':h<16?'12h':h<20?'16h':'20h';data[day][sl]++;});
+  let max=0;Object.values(data).forEach(d=>Object.values(d).forEach(v=>{if(v>max)max=v;}));
+  const el=document.getElementById('hm-wrap');if(!el)return;
+  let html=`<table class="hmt"><thead><tr><th></th>${hrs.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  days.forEach(d=>{html+=`<tr><td class="hm-day">${d}</td>`;hrs.forEach(h=>{const v=data[d][h],c=max>0&&v>0?(v/max>=.65?'h':v/max>=.3?'m':'l'):'e';html+=`<td class="hmc ${c}" title="${d} ${h}: ${v} vendas">${v||''}</td>`;});html+=`</tr>`;});
+  html+=`</tbody></table><div class="hm-leg"><div class="hm-li"><div class="hm-lc" style="background:rgba(34,197,94,.38)"></div>Alto</div><div class="hm-li"><div class="hm-lc" style="background:rgba(245,158,11,.28)"></div>Médio</div><div class="hm-li"><div class="hm-lc" style="background:rgba(239,68,68,.18)"></div>Baixo</div></div>`;
+  el.innerHTML=html;
+}
+
+/* PEAK CHART */
+function renderPeak(){
+  const byH={};
+  sessions.forEach(s=>{const d=toDate(s.enteredAt);if(!d)return;const h=d.getHours();if(!byH[h])byH[h]=new Set();byH[h].add(s.sessionId||s.id);});
+  const labels=Array.from({length:24},(_,i)=>i.toString().padStart(2,'0')+'h');
+  const data=Array.from({length:24},(_,i)=>byH[i]?byH[i].size:0);
+  const ctx=document.getElementById('peakChart');if(!ctx)return;
+  if(pchart)pchart.destroy();
+  pchart=new Chart(ctx.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Visitantes',data,backgroundColor:'rgba(239,68,68,.3)',borderColor:'#ef4444',borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
+}
+
+/* CHANNELS — usa resolveChForSale */
+function renderCh(){
+  const p=document.getElementById('ch-period')?.value||'7d',r=getRange(p);
+  const el=document.getElementById('ch-grid');if(!el)return;
+  const data=CHANNELS.map(ch=>{
+    const sc=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end&&matchCh(s,ch);});
+    const vc=sales.filter(s=>{
+      const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end||!isPaid(s))return false;
+      const c=resolveChForSale(s);
+      return c&&(c===ch||c.includes(ch));
+    });
+    const rev=vc.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+    const conv=sc.length>0?(vc.length/sc.length*100).toFixed(1):'0.0';
+    return{ch,sc:sc.length,chk:sc.filter(s=>isChk(s)).length,sales:vc.length,rev,conv};
+  }).sort((a,b)=>b.rev-a.rev);
+  el.innerHTML=data.map(d=>{
+    const tier=d.sales>5?'best':d.sales>0?'good':'bad';
+    const badge=d.sales>5?'🏆 TOP':d.sales>0?'✅ ATIVO':'⚠️ SEM VENDA';
+    return`<div class="ch-card ${tier}">
+      <div class="ch-n">${fch(d.ch)}<span class="ch-bdg ${tier}">${badge}</span></div>
+      <div class="ch-ms">
+        <div class="ch-m"><div class="ch-mv">${d.sc}</div><div class="ch-ml">Acessos</div></div>
+        <div class="ch-m"><div class="ch-mv">${d.chk}</div><div class="ch-ml">Checkout</div></div>
+        <div class="ch-m"><div class="ch-mv">${d.sales}</div><div class="ch-ml">Vendas</div></div>
+      </div>
+      <div class="ch-rev"><div class="ch-rl">Receita Líquida · Conv. ${d.conv}%</div><div class="ch-rv">${brl(d.rev)}</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* SPY — vinculação com venda por tempo */
+window.setSpy=(f,btn)=>{spyFilter=f;document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSpy();};
+function renderSpy(){
+  const el=document.getElementById('spy-grid');if(!el)return;
+
+  // Monta mapa reverso: sessionId → venda (para espião mostrar R$ correto)
+  const sessToSale=new Map();
+  saleSessionCache.forEach((sess,saleId)=>{
+    const sale=sales.find(s=>s.id===saleId);
+    if(sale&&isPaid(sale))sessToSale.set(sess.sessionId||sess.id,sale);
+  });
+
+  const uniq=sessions.filter((v,i,a)=>a.findIndex(t=>(t.sessionId||t.id)===(v.sessionId||v.id))===i);
+  let list=uniq;
+  if(spyFilter==='online') list=uniq.filter(s=>isOnline(s.lastActivity));
+  if(spyFilter==='checkout') list=uniq.filter(s=>isChk(s));
+  if(spyFilter==='sale') list=uniq.filter(s=>sessToSale.has(s.sessionId||s.id));
+  list=list.sort((a,b)=>toDate(b.lastActivity)-toDate(a.lastActivity)).slice(0,48);
+  if(!list.length){el.innerHTML='<div class="empty">Nenhum lead encontrado</div>';return;}
+  el.innerHTML=list.map(s=>{
+    const online=isOnline(s.lastActivity),sid=s.sessionId||s.id,short=sid.substr(-6).toUpperCase();
+    const sale=sessToSale.get(sid),hasSale=!!sale;
+    const chk=isChk(s),n=hasSale?net(sale.amount||0,sale.paymentMethod).toFixed(2):0;
+    const fi=fIdx(s,hasSale),fl=fLabel(s,hasSale);
+    const ch=getChFromObj(s);
+    const bar=FSTEPS.map((_,i)=>`<div class="fs ${i<fi?'done':i===fi?'now':''}"></div>`).join('');
+    return`<div class="spy-item ${hasSale?'sale':chk?'checkout':''}">
+      <div class="spy-av">${short.charAt(0)}</div>
+      <div class="spy-b">
+        <div class="spy-row"><div class="spy-id">Lead #${short}</div><div class="spy-t">${ago(s.lastActivity)}</div></div>
+        <div class="spy-st ${hasSale?'sale':chk?'checkout':''}">${fl}</div>
+        ${ch?`<div class="spy-ch">📡 ${fch(ch)}</div>`:''}
+        <div class="spy-fun">${bar}</div>
+        <div class="f-lbl">${FSTEPS[fi]} · ${fi+1}/6</div>
+      </div>
+      <div class="spy-r">
+        ${online&&!hasSale?'<div class="odot"></div>':''}
+        ${chk&&!hasSale?'<div class="bchk">CHECKOUT</div>':''}
+        ${hasSale?`<div class="bsale">R$ ${n}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* FILTER CHANGE */
+window.onFilterChange=()=>{renderSalesList();renderSalesChart();renderCh();};
+
+/* FIREBASE */
+const app=initializeApp(FB),db=getFirestore(app);
+onSnapshot(collection(db,'sessions'),snap=>{sessions=snap.docs.map(d=>({id:d.id,...d.data()}));scheduleRender();});
+onSnapshot(collection(db,'sales'),snap=>{sales=snap.docs.map(d=>({id:d.id,...d.data()}));scheduleRender();});
+
+/* Espião suave a cada 5s */
+setInterval(()=>renderSpy(),5000);
 </script>
 </body>
 </html>
