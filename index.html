@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -90,6 +89,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .spy-status{font-size:12px;font-weight:700;color:#999}
 .spy-status.checkout{color:#00ff00}
 .spy-status.sale{color:#fbbf24}
+
+/* === NOVO: barra de progresso do funil === */
+.spy-funnel{display:flex;gap:3px;margin-top:8px}
+.funnel-step{flex:1;height:4px;border-radius:2px;background:#1a1a1a}
+.funnel-step.done{background:#00cc44}
+.funnel-step.active{background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,.6);animation:pulse-step .8s infinite alternate}
+@keyframes pulse-step{0%{opacity:.6}100%{opacity:1}}
+.funnel-label{font-size:9px;color:#555;margin-top:5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
 .spy-badges{display:flex;gap:5px;margin-top:6px}
 .online-dot{width:8px;height:8px;background:#00ff00;border-radius:50%;box-shadow:0 0 10px #00ff00}
 .checkout-badge{background:rgba(0,255,0,.1);color:#00ff00;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid #00ff00}
@@ -99,6 +107,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .spy-filter-btn.active{background:rgba(0,255,0,.1);border-color:#00ff00;color:#00ff00}
 .channel-period-select{background:rgba(0,0,0,.5);border:1px solid #444;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer}
 .empty-state{text-align:center;padding:40px;grid-column:1/-1;color:#444;font-size:14px}
+
+/* === NOVO: tag de canal na venda === */
+.channel-tag{display:inline-block;background:rgba(255,51,51,.12);border:1px solid rgba(255,51,51,.35);color:#ff6666;font-size:9px;font-weight:900;padding:2px 7px;border-radius:4px;margin-top:3px;letter-spacing:.4px;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -206,7 +217,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAs-REDACTED",
@@ -264,7 +275,114 @@ const getRange = f => {
     return {start, end: now};
 };
 
+// =====================================================
+// FIX 1 — Extrair idade de QUALQUER campo possível
+// =====================================================
+const extractAge = (session) => {
+    if (!session) return null;
+
+    // Tenta campos diretos na raiz da sessão
+    const directFields = ['idade', 'age', 'userAge', 'user_age'];
+    for (const f of directFields) {
+        const v = parseInt(session[f]);
+        if (!isNaN(v) && v > 0) return v;
+    }
+
+    // Tenta dentro de answers (vários formatos de chave)
+    if (session.answers && typeof session.answers === 'object') {
+        const answerKeys = [
+            'idade', 'age', 'q1', 'pergunta1', 'question1',
+            'q_idade', 'user_age', 'userAge', '0', 'first'
+        ];
+        for (const k of answerKeys) {
+            const v = parseInt(session.answers[k]);
+            if (!isNaN(v) && v > 0) return v;
+        }
+        // Varredura completa: pega o primeiro valor numérico que pareça idade (10-120)
+        for (const val of Object.values(session.answers)) {
+            const v = parseInt(val);
+            if (!isNaN(v) && v >= 10 && v <= 120) return v;
+        }
+    }
+
+    // Tenta dentro de responses
+    if (session.responses && typeof session.responses === 'object') {
+        for (const val of Object.values(session.responses)) {
+            const v = parseInt(val);
+            if (!isNaN(v) && v >= 10 && v <= 120) return v;
+        }
+    }
+
+    return null;
+};
+
+// =====================================================
+// FIX 2 — Extrair canal de QUALQUER campo possível
+// =====================================================
+const extractChannel = (sale, sessionMap) => {
+    // Tenta direto na venda
+    const directSaleFields = ['channel', 'channelDomain', 'source', 'utm_source', 'utmSource', 'origin'];
+    for (const f of directSaleFields) {
+        if (sale[f] && sale[f] !== 'undefined') return sale[f];
+    }
+
+    // Tenta achar a sessão vinculada
+    const sid = sale.sessionId || sale.externalId || sale.session_id;
+    const session = sid ? sessionMap[sid] : null;
+
+    if (session) {
+        const directSessionFields = ['channel', 'channelDomain', 'source', 'utm_source', 'utmSource', 'origin', 'domain'];
+        for (const f of directSessionFields) {
+            if (session[f] && session[f] !== 'undefined') return session[f];
+        }
+    }
+
+    return 'Direto';
+};
+
+const formatChannel = ch => ch.replace(/-/g, ' ').toUpperCase();
+
+// =====================================================
+// FIX 3 — Mapear currentStep para passo do funil
+// =====================================================
+const FUNNEL_STEPS = [
+    { key: 'entry',          label: 'Entrou',        steps: ['entry', 'landing', 'home', null, undefined, ''] },
+    { key: 'quiz_started',   label: 'Iniciou Quiz',  steps: ['quiz', 'quiz_started'] },
+    { key: 'quiz_progress',  label: 'No Quiz',       steps: ['quiz_progress', 'answering'] },
+    { key: 'quiz_completed', label: 'Terminou Quiz', steps: ['quiz_completed', 'result', 'result_shown'] },
+    { key: 'checkout',       label: 'Checkout',      steps: ['checkout', 'checkout_reached', 'payment'] },
+    { key: 'sale',           label: 'Comprou',       steps: ['sale', 'paid', 'completed'] },
+];
+
+const getFunnelIndex = (session, hasSale) => {
+    if (hasSale) return 5;
+    if (isCheckout(session)) return 4;
+    if (session.quizProgress >= TOTAL_Q || hasEvent(session, 'quiz_completed')) return 3;
+    if (session.quizProgress > 0 || hasEvent(session, 'quiz_started') || session.currentStep === 'quiz') return Math.max(1, Math.min(2, 1 + Math.floor(((session.quizProgress || 1) / TOTAL_Q) * 2)));
+    return 0;
+};
+
+const getFunnelLabel = (session, hasSale) => {
+    if (hasSale) return '💰 COMPROU!';
+    if (isCheckout(session)) return '💳 No Checkout';
+    if (session.quizProgress >= TOTAL_Q || hasEvent(session, 'quiz_completed')) return '✅ Vendo Resultado';
+    if (session.quizProgress > 0) return `📝 Quiz — ${session.quizProgress}/${TOTAL_Q} respostas`;
+    if (hasEvent(session, 'quiz_started') || session.currentStep === 'quiz') return '📝 Iniciou Quiz';
+    const raw = session.currentStep || '';
+    if (raw) return `📍 ${raw}`;
+    return '👋 Entrou no Funil';
+};
+
 // --- FUNÇÕES DE RENDERIZAÇÃO --- //
+
+function buildSessionMap() {
+    const map = {};
+    sessions.forEach(s => {
+        const sid = s.sessionId || s.id;
+        if (sid) map[sid] = s;
+    });
+    return map;
+}
 
 function updateStats() {
     const online = sessions.filter(s => isOnline(s.lastActivity)).length;
@@ -276,6 +394,8 @@ function updateStats() {
 function updateSales() {
     const filter = document.getElementById('date-filter').value;
     const range = getRange(filter);
+    const sessionMap = buildSessionMap();
+
     const filtered = sales.filter(s => {
         const d = toDate(s.createdAt);
         return d && d >= range.start && d <= range.end && isPaidSale(s);
@@ -286,17 +406,22 @@ function updateSales() {
         listEl.innerHTML = '<div class="empty-state">Nenhuma venda no período.</div>';
     } else {
         listEl.innerHTML = filtered.slice(0, 10).map(s => {
+            // FIX 2: usa extractChannel
+            const channelRaw = extractChannel(s, sessionMap);
+            const channelDisplay = formatChannel(channelRaw);
+
+            // FIX 1: usa extractAge
             const sid = s.sessionId || s.externalId;
-            const session = sessions.find(x => (x.sessionId || x.id) === sid);
-            let channel = s.channel || session?.channel || s.channelDomain || session?.channelDomain || 'Direto';
-            channel = channel.replace(/-/g, ' ').toUpperCase();
-            let age = '---';
-            if (session?.answers) { age = session.answers.idade || session.answers.age || session.answers.q1 || session.answers.pergunta1 || '---'; }
+            const session = sessionMap[sid];
+            const age = extractAge(session);
+            const ageDisplay = age ? `${age} anos` : 'idade n/d';
+
             return `
                 <div class="sale-item">
                     <div class="sale-info">
-                        <div class="sale-name">${s.customerName || 'Cliente Alpha'} (${age} anos)</div>
-                        <div class="sale-meta">${timeAgo(s.createdAt)} • ${channel} • ${s.paymentMethod?.toUpperCase() || 'PIX'}</div>
+                        <div class="sale-name">${s.customerName || 'Cliente Alpha'} (${ageDisplay})</div>
+                        <div class="sale-meta">${timeAgo(s.createdAt)} • ${s.paymentMethod?.toUpperCase() || 'PIX'}</div>
+                        <div class="channel-tag">📡 ${channelDisplay}</div>
                     </div>
                     <div class="sale-amount">R$ ${netRev(s.amount || 0, s.paymentMethod).toFixed(2)}</div>
                 </div>
@@ -448,23 +573,31 @@ function renderChannelPerf() {
     const el = document.getElementById('channel-perf-grid');
     const period = document.getElementById('perf-period').value;
     const range = getRange(period);
+    const sessionMap = buildSessionMap();
     const CHANNELS = ['doutor-cajado', 'doutor-reginaldo', 'doutor-saude', 'doutor-bigode', 'cajado-supremo'];
+
+    const matchChannel = (obj, ch) => {
+        const fields = ['channel', 'channelDomain', 'source', 'utmSource', 'utm_source', 'origin', 'domain'];
+        return fields.some(f => obj[f] && (obj[f] === ch || String(obj[f]).includes(ch)));
+    };
     
     const data = CHANNELS.map(ch => {
         const sCh = sessions.filter(s => {
             const d = toDate(s.enteredAt || s.lastActivity);
-            return d && d >= range.start && d <= range.end && (s.channel === ch || s.channelDomain?.includes(ch));
+            return d && d >= range.start && d <= range.end && matchChannel(s, ch);
         });
         const cCh = sCh.filter(s => isCheckout(s));
         const vCh = sales.filter(s => {
             const d = toDate(s.createdAt);
+            if (!d || d < range.start || d > range.end || !isPaidSale(s)) return false;
+            if (matchChannel(s, ch)) return true;
+            // FIX 2: verifica também via sessão vinculada
             const sid = s.sessionId || s.externalId;
-            const session = sessions.find(x => (x.sessionId || x.id) === sid);
-            const channelMatch = (s.channel === ch || s.channelDomain?.includes(ch)) || (session && (session.channel === ch || session.channelDomain?.includes(ch)));
-            return d && d >= range.start && d <= range.end && isPaidSale(s) && channelMatch;
+            const session = sessionMap[sid];
+            return session && matchChannel(session, ch);
         });
         const rev = vCh.reduce((sum, s) => sum + netRev(s.amount || 0, s.paymentMethod), 0);
-        return { id: ch, name: ch.replace(/-/g, ' ').toUpperCase(), sessions: sCh.length, checkouts: cCh.length, sales: vCh.length, revenue: rev };
+        return { id: ch, name: formatChannel(ch), sessions: sCh.length, checkouts: cCh.length, sales: vCh.length, revenue: rev };
     }).sort((a,b) => b.revenue - a.revenue);
 
     el.innerHTML = data.map(d => `
@@ -483,68 +616,67 @@ function renderChannelPerf() {
 function updateInsights() {
     const el = document.getElementById('insights-grid');
     const range7d = getRange('7d');
+    const sessionMap = buildSessionMap();
     const s7d = sessions.filter(s => { const d = toDate(s.enteredAt || s.lastActivity); return d && d >= range7d.start; });
     const v7d = sales.filter(s => { const d = toDate(s.createdAt); return d && d >= range7d.start && isPaidSale(s); });
     
     const tS = s7d.length, tSales = v7d.length, tChk = s7d.filter(s => isCheckout(s)).length;
     const cards = [];
     
-    // 📈 Vendas por 1000 Acessos
     const v1000 = tS > 0 ? (tSales / tS * 1000).toFixed(1) : 0;
     cards.push({type:'great', icon:'📈', title:'Vendas por 1000 Acessos', value: v1000, desc: `Você gera <strong>${v1000} vendas</strong> a cada 1000 acessos orgânicos.`});
 
-    // 🛒 Abandono de Checkout
     const abandonment = tChk > 0 ? ((tChk - tSales) / tChk * 100).toFixed(1) : 0;
     cards.push({type: abandonment > 50 ? 'danger' : 'warn', icon:'🛒', title:'Abandono de Checkout', value: `${abandonment}%`, desc: `<strong>${abandonment}%</strong> das pessoas que chegam ao checkout não finalizam a compra.`});
 
-    // 📝 Retenção do Quiz
     const tQS = s7d.filter(s => hasEvent(s, 'quiz_started')).length;
     const tQC = s7d.filter(s => hasEvent(s, 'quiz_completed')).length;
     const ret = tQS > 0 ? (tQC/tQS*100).toFixed(1) : 0;
     cards.push({type: ret > 60 ? 'great' : 'warn', icon:'📝', title:'Retenção do Quiz', value: `${ret}%`, desc: `<strong>${ret}%</strong> dos que iniciam o quiz chegam até o final.`});
 
-    // 💲 Ticket Médio Líquido
     const totalRev = v7d.reduce((sum, s) => sum + netRev(s.amount || 0, s.paymentMethod), 0);
     const ticket = tSales > 0 ? (totalRev / tSales).toFixed(2) : 0;
     cards.push({type:'great', icon:'💲', title:'Ticket Médio Líquido', value: `R$ ${ticket}`, desc: `Seu faturamento médio por venda é de <strong>R$ ${ticket}</strong>.`});
 
-    // 🔮 Projeção de Faturamento
     const proj = (totalRev / 7 * 30).toFixed(2);
     cards.push({type:'great', icon:'🔮', title:'Projeção de Faturamento', value: `R$ ${proj}`, desc: `Baseado nos últimos 7 dias, sua projeção é de <strong>R$ ${proj}</strong> este mês.`});
     
-    // 👴 Idade Média dos Compradores
+    // FIX 1 — Usa extractAge em vez de só session.answers.idade
     let totalAge = 0, ageCount = 0;
     v7d.forEach(s => {
         const sid = s.sessionId || s.externalId;
-        const session = sessions.find(x => (x.sessionId || x.id) === sid);
-        if (session?.answers) {
-            const age = parseInt(session.answers.idade || session.answers.age || session.answers.q1 || session.answers.pergunta1);
-            if (!isNaN(age)) { totalAge += age; ageCount++; }
-        }
+        const session = sessionMap[sid];
+        const age = extractAge(session);
+        if (age !== null) { totalAge += age; ageCount++; }
     });
     const avgAge = ageCount > 0 ? (totalAge / ageCount).toFixed(1) : '---';
-    cards.push({type:'great', icon:'👴', title:'Idade Média Compradores', value: `${avgAge} anos`, desc: `O perfil médio do seu comprador pagante é de <strong>${avgAge} anos</strong>.`});
+    const ageType = ageCount > 0 ? 'great' : 'warn';
+    cards.push({type: ageType, icon:'👴', title:'Idade Média Compradores', value: `${avgAge} anos`, desc: ageCount > 0 ? `O perfil médio do seu comprador pagante é de <strong>${avgAge} anos</strong> (${ageCount} amostras).` : 'Nenhuma resposta de idade encontrada. Verifique o campo <code>idade</code> no Firestore.'});
 
-    // --- INSIGHTS DE CANAIS --- //
     const CHANNELS = ['doutor-cajado', 'doutor-reginaldo', 'doutor-saude', 'doutor-bigode', 'cajado-supremo'];
+    const matchChannel = (obj, ch) => {
+        const fields = ['channel', 'channelDomain', 'source', 'utmSource', 'utm_source', 'origin', 'domain'];
+        return fields.some(f => obj[f] && (obj[f] === ch || String(obj[f]).includes(ch)));
+    };
     const chData = CHANNELS.map(ch => {
-        const sCh = s7d.filter(s => s.channel === ch || s.channelDomain?.includes(ch));
+        const sCh = s7d.filter(s => matchChannel(s, ch));
         const vCh = v7d.filter(s => {
+            if (matchChannel(s, ch)) return true;
             const sid = s.sessionId || s.externalId;
-            const session = sessions.find(x => (x.sessionId || x.id) === sid);
-            return (s.channel === ch || s.channelDomain?.includes(ch)) || (session && (session.channel === ch || session.channelDomain?.includes(ch)));
+            const session = sessionMap[sid];
+            return session && matchChannel(session, ch);
         });
         return { id: ch, conv: sCh.length > 0 ? (vCh.length / sCh.length * 100) : 0, sales: vCh.length, chk: sCh.filter(s => isCheckout(s)).length };
     });
 
     const bestConv = [...chData].sort((a,b) => b.conv - a.conv)[0];
     if(bestConv && bestConv.conv > 0) {
-        cards.push({type:'great', icon:'🏆', title:'Melhor Canal de Conversão', value: bestConv.id.replace(/-/g, ' ').toUpperCase(), desc: `O canal <strong>${bestConv.id}</strong> tem a melhor taxa de fechamento (${bestConv.conv.toFixed(1)}%).`});
+        cards.push({type:'great', icon:'🏆', title:'Melhor Canal de Conversão', value: formatChannel(bestConv.id), desc: `O canal <strong>${bestConv.id}</strong> tem a melhor taxa de fechamento (${bestConv.conv.toFixed(1)}%).`});
     }
 
     const mostHot = [...chData].sort((a,b) => b.chk - a.chk)[0];
     if(mostHot && mostHot.chk > 0) {
-        cards.push({type:'great', icon:'🔥', title:'Canal Mais Quente', value: mostHot.id.replace(/-/g, ' ').toUpperCase(), desc: `O canal <strong>${mostHot.id}</strong> é o que mais leva pessoas ao checkout.`});
+        cards.push({type:'great', icon:'🔥', title:'Canal Mais Quente', value: formatChannel(mostHot.id), desc: `O canal <strong>${mostHot.id}</strong> é o que mais leva pessoas ao checkout.`});
     }
 
     el.innerHTML = cards.map(c => `
@@ -564,8 +696,10 @@ window.filterSpy = (f, evt) => {
     renderSpy();
 };
 
+// FIX 3 — Espião com barra de progresso do funil em tempo real
 function renderSpy() {
     const el = document.getElementById('spy-container');
+    const sessionMap = buildSessionMap();
     const unique = sessions.filter((v, i, a) => a.findIndex(t => (t.sessionId || t.id) === (v.sessionId || v.id)) === i);
     let list = unique;
     if (spyFilter === 'online') list = unique.filter(s => isOnline(s.lastActivity));
@@ -578,14 +712,42 @@ function renderSpy() {
         return;
     }
     el.innerHTML = list.map(s => {
-        const online = isOnline(s.lastActivity), sid = s.sessionId || s.id, shortId = sid.substr(-6).toUpperCase(), chk = isCheckout(s), sale = sales.find(x => isPaidSale(x) && (x.sessionId === sid)), hasSale = !!sale, net = hasSale ? netRev(sale.amount || 0, sale.paymentMethod).toFixed(2) : 0;
-        const status = hasSale ? '💰 COMPROU!' : hasEvent(s, 'result_shown') ? '📊 Vendo Análise' : hasEvent(s, 'quiz_completed') ? '✅ Quiz Completo' : s.quizProgress > 0 ? `📝 No Quiz (${s.quizProgress}/8)` : '👋 Entrou no Funil';
+        const online = isOnline(s.lastActivity);
+        const sid = s.sessionId || s.id;
+        const shortId = sid.substr(-6).toUpperCase();
+        const chk = isCheckout(s);
+        const sale = sales.find(x => isPaidSale(x) && (x.sessionId === sid));
+        const hasSale = !!sale;
+        const net = hasSale ? netRev(sale.amount || 0, sale.paymentMethod).toFixed(2) : 0;
+
+        // FIX 3: status com passo real do funil
+        const statusLabel = getFunnelLabel(s, hasSale);
+        const funnelIdx = getFunnelIndex(s, hasSale);
+
+        // Barra de progresso — 6 passos
+        const funnelBar = FUNNEL_STEPS.map((step, i) => {
+            const cls = i < funnelIdx ? 'done' : i === funnelIdx ? 'active' : '';
+            return `<div class="funnel-step ${cls}" title="${step.label}"></div>`;
+        }).join('');
+
+        // Canal da sessão
+        const channelRaw = extractChannel(s, sessionMap);
+        const channelDisplay = formatChannel(channelRaw !== 'Direto' ? channelRaw : (s.channel || s.channelDomain || ''));
+        const channelTag = channelDisplay && channelDisplay !== 'DIRETO' && channelDisplay !== ''
+            ? `<div class="channel-tag">📡 ${channelDisplay}</div>` : '';
+
         return `
             <div class="spy-item ${hasSale ? 'sale' : chk ? 'checkout' : ''}">
                 <div class="spy-avatar">${shortId.charAt(0)}</div>
                 <div class="spy-content">
-                    <div class="spy-header"><div class="spy-id">Lead #${shortId}</div><div class="spy-time">${timeAgo(s.lastActivity)}</div></div>
-                    <div class="spy-status ${hasSale ? 'sale' : chk ? 'checkout' : ''}">${status}</div>
+                    <div class="spy-header">
+                        <div class="spy-id">Lead #${shortId}</div>
+                        <div class="spy-time">${timeAgo(s.lastActivity)}</div>
+                    </div>
+                    <div class="spy-status ${hasSale ? 'sale' : chk ? 'checkout' : ''}">${statusLabel}</div>
+                    ${channelTag}
+                    <div class="spy-funnel">${funnelBar}</div>
+                    <div class="funnel-label">${FUNNEL_STEPS[funnelIdx]?.label || 'Funil'} · passo ${funnelIdx + 1}/6</div>
                 </div>
                 <div class="spy-badges">
                     ${online && !hasSale ? '<div class="online-dot"></div>' : ''}
@@ -618,7 +780,7 @@ onSnapshot(collection(db, "sales"), snap => {
     updateAll();
 });
 
-setInterval(updateAll, 1000); // Espião ultra-rápido (1s)
+setInterval(updateAll, 1000);
 
 </script>
 </body>
