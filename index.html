@@ -10,135 +10,133 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --red:#ef4444;--red-dim:rgba(239,68,68,.12);--red-glow:rgba(239,68,68,.35);
-  --green:#22c55e;--green-dim:rgba(34,197,94,.1);--green-glow:rgba(34,197,94,.3);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.1);
   --gold:#f59e0b;--gold-dim:rgba(245,158,11,.1);--gold-glow:rgba(245,158,11,.3);
   --bg:#070709;--surface:#0f1014;--surface2:#15171d;--border:#1e2028;
   --text:#f1f1f3;--muted:#5a5d6b;--subtle:#2a2d38;
 }
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);padding:16px;min-height:100vh}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:#2a2d38;border-radius:4px}
-
-.wrap{max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
 /* HEADER */
-.header{background:linear-gradient(135deg,#0f0f14 0%,#1a0810 100%);border:1px solid #2a1520;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 0 40px rgba(239,68,68,.07)}
-.hb{display:flex;align-items:center;gap:14px}
-.hlogo{width:42px;height:42px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 18px var(--red-glow);flex-shrink:0}
-.htitle{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.4px}
-.hsub{font-size:11px;color:var(--muted);margin-top:2px}
-.hstatus{display:flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid rgba(34,197,94,.2);padding:7px 13px;border-radius:8px;font-size:11px;font-weight:700;color:var(--green)}
+.header{background:linear-gradient(135deg,#0f0f14,#1a0810);border:1px solid #2a1520;border-radius:16px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hb{display:flex;align-items:center;gap:12px}
+.hlogo{width:40px;height:40px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px var(--red-glow);flex-shrink:0}
+.htitle{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.hsub{font-size:10px;color:var(--muted);margin-top:1px}
+.hstatus{display:flex;align-items:center;gap:7px;background:var(--green-dim);border:1px solid rgba(34,197,94,.2);padding:6px 12px;border-radius:7px;font-size:10px;font-weight:700;color:var(--green)}
 .pdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pdot 1.5s infinite}
 @keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* ONLINE HERO */
+.oh{background:linear-gradient(135deg,rgba(239,68,68,.09),rgba(239,68,68,.02));border:1px solid rgba(239,68,68,.16);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.oh-num{font-size:56px;font-weight:900;color:var(--red);line-height:1;text-shadow:0 0 22px var(--red-glow);letter-spacing:-3px}
+.oh-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+.oh-sub{font-size:10px;color:#252830;margin-top:3px}
+.rings{position:relative;width:50px;height:50px;flex-shrink:0}
+.ring{position:absolute;border-radius:50%;border:2px solid var(--red);animation:re 2.5s infinite}
+.ring:nth-child(1){inset:0;animation-delay:0s;opacity:.5}
+.ring:nth-child(2){inset:-7px;animation-delay:.65s;opacity:.28}
+.ring:nth-child(3){inset:-14px;animation-delay:1.3s;opacity:.1}
+@keyframes re{0%{transform:scale(.8);opacity:.5}100%{transform:scale(1.4);opacity:0}}
+.ring-c{position:absolute;inset:11px;background:var(--red);border-radius:50%;box-shadow:0 0 10px var(--red-glow)}
+
 /* KPI STRIP */
-.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px 16px;position:relative;overflow:hidden}
 .kpi-bar{position:absolute;top:0;left:0;width:3px;height:100%}
-.kpi-icon{font-size:18px;margin-bottom:6px;display:block}
-.kpi-v{font-size:26px;font-weight:900;line-height:1;letter-spacing:-1px;color:#fff}
-.kpi-l{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.kpi-icon{font-size:16px;margin-bottom:5px;display:block}
+.kpi-v{font-size:24px;font-weight:900;line-height:1;letter-spacing:-1px;color:#fff}
+.kpi-l{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
 
 /* CARD */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
-.ctitle{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.cactions{margin-left:auto;display:flex;gap:8px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px}
+.ctitle{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cactions{margin-left:auto;display:flex;gap:6px;align-items:center}
 
-/* SEL / TABS */
-.sel{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
-.tabs{display:flex;gap:5px;flex-wrap:wrap}
-.tab{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 11px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit}
-.tab.active{background:var(--green-dim);border-color:rgba(34,197,94,.4);color:var(--green)}
+/* SELECT / TABS — pointer-events nunca bloqueados */
+.sel{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;outline:none;-webkit-appearance:none}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:5px;font-size:10px;font-weight:800;cursor:pointer;transition:all .12s;font-family:inherit;outline:none}
+.tab.active{background:var(--green-dim);border-color:rgba(34,197,94,.35);color:var(--green)}
 
 /* GRIDS */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-@media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px}
+@media(max-width:650px){.g2{grid-template-columns:1fr}}
 
 /* CMP TABLE */
 .cmp{width:100%;border-collapse:collapse}
-.cmp th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
-.cmp td{padding:9px 10px;font-size:13px;font-weight:700;border-bottom:1px solid #0d0e11;font-variant-numeric:tabular-nums}
+.cmp th{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;padding:6px 9px;text-align:left;border-bottom:1px solid var(--border)}
+.cmp td{padding:8px 9px;font-size:13px;font-weight:700;border-bottom:1px solid #0d0e11;font-variant-numeric:tabular-nums}
 .cmp tr:last-child td{border-bottom:none}
 .cl{color:var(--muted);font-size:11px}
 .cv{color:#fff}
 .cv.hi{color:var(--green)}
 
 /* SALES LIST */
-.slist{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow-y:auto;padding-right:3px}
-.si{display:flex;align-items:center;gap:11px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px}
-.si-av{width:34px;height:34px;background:var(--gold-dim);border:1px solid rgba(245,158,11,.25);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gold);flex-shrink:0}
+.slist{display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;padding-right:2px}
+.si{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:8px}
+.si-av{width:32px;height:32px;background:var(--gold-dim);border:1px solid rgba(245,158,11,.22);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--gold);flex-shrink:0}
 .si-info{flex:1;min-width:0}
-.si-name{font-size:12px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.si-meta{font-size:9px;color:var(--muted);margin-top:2px}
-.si-ch{font-size:8px;color:var(--red);font-weight:800;text-transform:uppercase;margin-top:2px;letter-spacing:.3px}
-.si-amt{font-size:14px;font-weight:900;color:var(--gold);flex-shrink:0}
+.si-name{font-size:11px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.si-meta{font-size:9px;color:var(--muted);margin-top:1px}
+.si-ch{font-size:8px;color:var(--red);font-weight:800;text-transform:uppercase;margin-top:1px;letter-spacing:.3px}
+.si-amt{font-size:13px;font-weight:900;color:var(--gold);flex-shrink:0}
 
 /* CHART */
-.chwrap{height:240px;position:relative}
+.chwrap{height:220px;position:relative}
 
 /* HEATMAP */
-.hmt{width:100%;border-collapse:separate;border-spacing:3px}
-.hmt th{font-size:9px;color:var(--muted);text-transform:uppercase;padding:3px;text-align:center;font-weight:700}
-.hm-day{font-size:9px;font-weight:800;color:var(--muted);text-align:right;padding-right:7px;white-space:nowrap}
-.hmc{height:28px;border-radius:4px;text-align:center;vertical-align:middle;font-size:9px;font-weight:800}
+.hmt{width:100%;border-collapse:separate;border-spacing:2px}
+.hmt th{font-size:8px;color:var(--muted);text-transform:uppercase;padding:3px;text-align:center;font-weight:700}
+.hm-day{font-size:8px;font-weight:800;color:var(--muted);text-align:right;padding-right:6px;white-space:nowrap}
+.hmc{height:26px;border-radius:3px;text-align:center;vertical-align:middle;font-size:9px;font-weight:800}
 .hmc.e{background:rgba(255,255,255,.03)}
-.hmc.l{background:rgba(239,68,68,.18);color:rgba(255,255,255,.6);border:1px solid rgba(239,68,68,.28)}
-.hmc.m{background:rgba(245,158,11,.28);color:#fff;border:1px solid rgba(245,158,11,.4)}
-.hmc.h{background:rgba(34,197,94,.38);color:#fff;border:1px solid rgba(34,197,94,.5)}
-.hm-leg{display:flex;gap:12px;justify-content:center;margin-top:10px}
+.hmc.l{background:rgba(239,68,68,.16);color:rgba(255,255,255,.55);border:1px solid rgba(239,68,68,.25)}
+.hmc.m{background:rgba(245,158,11,.25);color:#fff;border:1px solid rgba(245,158,11,.38)}
+.hmc.h{background:rgba(34,197,94,.35);color:#fff;border:1px solid rgba(34,197,94,.5)}
+.hm-leg{display:flex;gap:12px;justify-content:center;margin-top:9px}
 .hm-li{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);font-weight:700}
-.hm-lc{width:9px;height:9px;border-radius:2px}
+.hm-lc{width:8px;height:8px;border-radius:2px}
 
 /* CHANNEL CARDS */
-.ch-card{background:var(--surface2);border:2px solid var(--border);border-radius:13px;padding:16px;transition:border-color .2s}
+.ch-card{background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:14px}
 .ch-card.best{border-color:var(--green)}
 .ch-card.good{border-color:var(--gold)}
-.ch-card.bad{border-color:rgba(239,68,68,.25)}
-.ch-n{font-size:12px;font-weight:900;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.ch-bdg{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:900;text-transform:uppercase;letter-spacing:.3px}
-.ch-bdg.best{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.3)}
-.ch-bdg.good{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,158,11,.3)}
-.ch-bdg.bad{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2)}
-.ch-ms{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.ch-m{background:rgba(0,0,0,.25);padding:8px;border-radius:7px;text-align:center}
-.ch-mv{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.ch-card.bad{border-color:rgba(239,68,68,.22)}
+.ch-n{font-size:11px;font-weight:900;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ch-bdg{font-size:8px;padding:2px 5px;border-radius:3px;font-weight:900;text-transform:uppercase}
+.ch-bdg.best{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.28)}
+.ch-bdg.good{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,158,11,.28)}
+.ch-bdg.bad{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.18)}
+.ch-ms{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:9px}
+.ch-m{background:rgba(0,0,0,.22);padding:7px;border-radius:6px;text-align:center}
+.ch-mv{font-size:17px;font-weight:900;color:#fff;line-height:1}
 .ch-ml{font-size:7px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-top:2px}
-.ch-rev{background:var(--green-dim);border:1px solid rgba(34,197,94,.2);padding:10px;border-radius:7px;text-align:center}
-.ch-rv{font-size:18px;font-weight:900;color:var(--green)}
+.ch-rev{background:var(--green-dim);border:1px solid rgba(34,197,94,.18);padding:9px;border-radius:6px;text-align:center}
+.ch-rv{font-size:17px;font-weight:900;color:var(--green)}
 .ch-rl{font-size:8px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:2px}
 
 /* INSIGHTS */
-.ins-card{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:14px}
+.ins-card{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:9px;padding:13px}
 .ins-card.warn{border-left-color:var(--gold)}
 .ins-card.danger{border-left-color:var(--red)}
-.ins-e{font-size:20px;margin-bottom:5px;display:block}
-.ins-t{font-size:9px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.ins-e{font-size:19px;margin-bottom:4px;display:block}
+.ins-t{font-size:9px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px}
 .ins-card.warn .ins-t{color:var(--gold)}
 .ins-card.danger .ins-t{color:var(--red)}
-.ins-v{font-size:22px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:3px}
+.ins-v{font-size:21px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:3px}
 .ins-d{font-size:10px;color:var(--muted);line-height:1.5}
 
-/* ONLINE HERO */
-.oh{background:linear-gradient(135deg,rgba(239,68,68,.1) 0%,rgba(239,68,68,.03) 100%);border:1px solid rgba(239,68,68,.18);border-radius:14px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.oh-num{font-size:58px;font-weight:900;color:var(--red);line-height:1;text-shadow:0 0 25px var(--red-glow);letter-spacing:-3px}
-.oh-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.oh-sub{font-size:10px;color:#2a2d38}
-.rings{position:relative;width:54px;height:54px;flex-shrink:0}
-.ring{position:absolute;border-radius:50%;border:2px solid var(--red);animation:re 2.5s infinite}
-.ring:nth-child(1){inset:0;animation-delay:0s;opacity:.55}
-.ring:nth-child(2){inset:-7px;animation-delay:.65s;opacity:.3}
-.ring:nth-child(3){inset:-14px;animation-delay:1.3s;opacity:.12}
-@keyframes re{0%{transform:scale(.8);opacity:.55}100%{transform:scale(1.35);opacity:0}}
-.ring-c{position:absolute;inset:12px;background:var(--red);border-radius:50%;box-shadow:0 0 12px var(--red-glow)}
-
 /* SPY */
-.spy-item{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:11px}
-.spy-item.checkout{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.03)}
-.spy-item.sale{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.04)}
-.spy-av{width:36px;height:36px;background:var(--subtle);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted);font-size:13px;flex-shrink:0}
+.spy-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;contain:layout style}
+.spy-item.checkout{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.025)}
+.spy-item.sale{border-color:rgba(245,158,11,.32);background:rgba(245,158,11,.035)}
+.spy-av{width:34px;height:34px;background:var(--subtle);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted);font-size:12px;flex-shrink:0}
 .spy-b{flex:1;min-width:0}
 .spy-row{display:flex;justify-content:space-between;align-items:center}
 .spy-id{font-size:11px;font-weight:900;color:#fff}
@@ -147,7 +145,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .spy-st.checkout{color:var(--green)}
 .spy-st.sale{color:var(--gold)}
 .spy-ch{font-size:8px;color:var(--red);font-weight:800;text-transform:uppercase;margin-top:2px;letter-spacing:.3px}
-.spy-fun{display:flex;gap:2px;margin-top:6px}
+.spy-fun{display:flex;gap:2px;margin-top:5px}
 .fs{flex:1;height:3px;border-radius:2px;background:var(--subtle)}
 .fs.done{background:var(--green)}
 .fs.now{background:var(--gold);animation:fp .9s infinite alternate}
@@ -155,16 +153,52 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .f-lbl{font-size:8px;color:var(--muted);margin-top:3px;font-weight:700;text-transform:uppercase}
 .spy-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
 .odot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 7px var(--green)}
-.bchk{background:var(--green-dim);color:var(--green);font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid rgba(34,197,94,.3)}
-.bsale{background:var(--gold-dim);color:var(--gold);font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid rgba(245,158,11,.3)}
+.bchk{background:var(--green-dim);color:var(--green);font-size:8px;font-weight:900;padding:2px 5px;border-radius:3px;border:1px solid rgba(34,197,94,.28)}
+.bsale{background:var(--gold-dim);color:var(--gold);font-size:8px;font-weight:900;padding:2px 5px;border-radius:3px;border:1px solid rgba(245,158,11,.28)}
+.empty{text-align:center;padding:26px;color:var(--muted);font-size:12px;grid-column:1/-1}
 
-.empty{text-align:center;padding:28px;color:var(--muted);font-size:12px;grid-column:1/-1}
+/* INTEL TABS */
+.itabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.itab{padding:9px 16px;font-size:11px;font-weight:800;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;text-transform:uppercase;letter-spacing:.6px;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.itab.active{color:var(--green);border-bottom-color:var(--green)}
+.itab.active.gold{color:var(--gold);border-bottom-color:var(--gold)}
+.ipanel{display:none}
+.ipanel.active{display:block}
+
+/* TIPS */
+.tip-list{display:flex;flex-direction:column;gap:10px}
+.tip{display:flex;gap:13px;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.tip.urgent{border-left:3px solid var(--red)}
+.tip.warn{border-left:3px solid var(--gold)}
+.tip.good{border-left:3px solid var(--green)}
+.tip.info{border-left:3px solid #8b5cf6}
+.tip-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.tip-body{}
+.tip-title{font-size:12px;font-weight:900;color:#fff;margin-bottom:3px}
+.tip-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.tip-badge{display:inline-block;font-size:8px;font-weight:900;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.tip-badge.urgent{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.tip-badge.warn{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,158,11,.2)}
+.tip-badge.good{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.tip-badge.info{background:rgba(139,92,246,.1);color:#a78bfa;border:1px solid rgba(139,92,246,.2)}
+
+/* TOAST */
+.toast-wrap{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:12px;font-weight:800;color:#fff;opacity:0;transform:translateX(40px);transition:all .3s;pointer-events:none;max-width:280px;box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.toast.chk{background:linear-gradient(135deg,#064e3b,#065f46);border:1px solid rgba(34,197,94,.35)}
+.toast.sale{background:linear-gradient(135deg,#451a03,#78350f);border:1px solid rgba(245,158,11,.45)}
+.toast.show{opacity:1;transform:translateX(0)}
+.toast-icon{font-size:20px;flex-shrink:0}
+.toast-sub{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);margin-top:1px}
+
+/* SOUND BTN */
+.snd-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 9px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;outline:none;display:flex;align-items:center;gap:4px;transition:all .15s}
+.snd-btn.on{color:var(--green);border-color:rgba(34,197,94,.3);background:var(--green-dim)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="hb">
       <div class="hlogo">⚡</div>
@@ -173,7 +207,6 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="hstatus"><div class="pdot"></div><span id="status-text">Conectando…</span></div>
   </div>
 
-  <!-- ONLINE HERO -->
   <div class="oh">
     <div>
       <div class="oh-lbl">Pessoas no Funil Agora</div>
@@ -183,7 +216,6 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring-c"></div></div>
   </div>
 
-  <!-- KPI STRIP -->
   <div class="kpi-strip">
     <div class="kpi"><div class="kpi-bar" style="background:var(--red)"></div><span class="kpi-icon">👥</span><div class="kpi-v" id="k-access">—</div><div class="kpi-l">Acessos Hoje</div></div>
     <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><span class="kpi-icon">💰</span><div class="kpi-v" id="k-sales">—</div><div class="kpi-l">Vendas Hoje</div></div>
@@ -193,47 +225,58 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><span class="kpi-icon">📈</span><div class="kpi-v" id="k-conv">—</div><div class="kpi-l">Conv. 7 Dias</div></div>
   </div>
 
-  <!-- INSIGHTS -->
   <div class="card">
-    <div class="ctitle">💡 Inteligência Orgânica</div>
-    <div class="ga" id="ins-grid"></div>
+    <div class="ctitle">💡 Inteligência &amp; Insights
+      <div class="cactions"><button class="snd-btn" id="snd-btn" onclick="toggleSound()" title="Sons de notificação">🔇 SOM OFF</button></div>
+    </div>
+    <div class="itabs">
+      <button class="itab active" onclick="setITab('metrics',this)">📊 Métricas</button>
+      <button class="itab gold" onclick="setITab('tips',this)">💡 Dicas de Vendas</button>
+    </div>
+    <div class="ipanel active" id="ip-metrics"><div class="ga" id="ins-grid"></div></div>
+    <div class="ipanel" id="ip-tips"><div class="tip-list" id="tips-list"></div></div>
   </div>
 
-  <!-- COMPARAÇÃO -->
   <div class="card">
     <div class="ctitle">📅 Comparação de Períodos</div>
     <table class="cmp"><thead><tr><th>Métrica</th><th>Hoje</th><th>Ontem</th><th>7 Dias</th><th>30 Dias</th></tr></thead><tbody id="cmp-body"></tbody></table>
   </div>
 
-  <!-- VENDAS -->
   <div class="card">
-    <div class="ctitle">💰 Vendas Confirmadas
-      <div class="cactions"><select class="sel" id="date-filter" onchange="onFilterChange()"><option value="today">Hoje</option><option value="yesterday">Ontem</option><option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option></select></div>
+    <div class="ctitle">💰 Vendas
+      <div class="cactions">
+        <select class="sel" id="date-filter" onchange="onFilter()">
+          <option value="today">Hoje</option><option value="yesterday">Ontem</option>
+          <option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option>
+        </select>
+      </div>
     </div>
     <div class="g2">
-      <div><div class="ctitle" style="font-size:9px;margin-bottom:10px">VENDAS NO TEMPO</div><div class="chwrap"><canvas id="salesChart"></canvas></div></div>
-      <div><div class="ctitle" style="font-size:9px;margin-bottom:10px">ÚLTIMAS VENDAS</div><div class="slist" id="sales-list"></div></div>
+      <div><div class="ctitle" style="font-size:9px;margin-bottom:8px">VENDAS NO TEMPO</div><div class="chwrap"><canvas id="salesChart"></canvas></div></div>
+      <div><div class="ctitle" style="font-size:9px;margin-bottom:8px">ÚLTIMAS VENDAS</div><div class="slist" id="sales-list"></div></div>
     </div>
   </div>
 
-  <!-- HEATMAP + PICO -->
   <div class="g2">
     <div class="card"><div class="ctitle">🔥 Heatmap de Vendas</div><div id="hm-wrap"></div></div>
-    <div class="card"><div class="ctitle">📊 Pico de Acessos (24h)</div><div class="chwrap"><canvas id="peakChart"></canvas></div></div>
+    <div class="card"><div class="ctitle">📊 Pico de Acessos</div><div class="chwrap"><canvas id="peakChart"></canvas></div></div>
   </div>
 
-  <!-- CANAIS -->
   <div class="card">
-    <div class="ctitle">📱 Performance por Canal TikTok
-      <div class="cactions"><select class="sel" id="ch-period" onchange="onFilterChange()"><option value="today">Hoje</option><option value="yesterday">Ontem</option><option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option></select></div>
+    <div class="ctitle">📱 Performance por Canal
+      <div class="cactions">
+        <select class="sel" id="ch-period" onchange="onFilter()">
+          <option value="today">Hoje</option><option value="yesterday">Ontem</option>
+          <option value="7d" selected>7 Dias</option><option value="30d">30 Dias</option>
+        </select>
+      </div>
     </div>
     <div class="ga" id="ch-grid"></div>
   </div>
 
-  <!-- ESPIÃO -->
   <div class="card">
     <div class="ctitle">🕵️ Espião de Fluxo
-      <div class="cactions tabs" id="spy-tabs">
+      <div class="cactions tabs">
         <button class="tab active" onclick="setSpy('all',this)">TODOS</button>
         <button class="tab" onclick="setSpy('online',this)">ONLINE</button>
         <button class="tab" onclick="setSpy('checkout',this)">CHECKOUT</button>
@@ -243,158 +286,230 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="ga" id="spy-grid"></div>
   </div>
 
-</div>
+</div><!-- /wrap -->
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import{getFirestore,collection,onSnapshot}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const FB={apiKey:"AIzaSyAs-REDACTED",authDomain:"alytics-metodo-alpha.firebaseapp.com",projectId:"alytics-metodo-alpha",storageBucket:"alytics-metodo-alpha.appspot.com",messagingSenderId:"REDACTED",appId:"1:REDACTED:web:REDACTED"};
-const CHANNELS=['doutor-cajado','doutor-reginaldo','doutor-saude','doutor-bigode','cajado-supremo'];
-const TQ=8;
-// Janela de tempo para cruzar venda com sessão (30 minutos)
-const MATCH_WINDOW_MS = 30 * 60 * 1000;
-
-let sessions=[],sales=[],spyFilter='all',schart,pchart;
-// Cache do cruzamento venda↔sessão — reconstruído só quando os dados mudam
-let saleSessionCache = new Map(); // saleId → session
-
-let pending=false;
-const scheduleRender=()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;buildSaleSessionCache();renderAll();});};
-
-/* ─────────────────────────────────────────────
-   HELPERS BÁSICOS
-───────────────────────────────────────────── */
-const toDate=ts=>{if(!ts)return null;if(ts.toDate)return ts.toDate();if(ts.seconds)return new Date(ts.seconds*1000);if(typeof ts==='string'||typeof ts==='number')return new Date(ts);return null;};
-const isPaid=s=>s.isPaid===true||s.paid===true||['pago','paid','approved'].includes(s.status);
-const isOnline=ts=>{const d=toDate(ts);return d&&(Date.now()-d.getTime())<300000;};
-const net=(v,m)=>(m==='pix'?v*.95:v*.90);
-const ago=ts=>{const d=toDate(ts);if(!d)return'---';const s=Math.floor((Date.now()-d.getTime())/1000);if(s<60)return'agora';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h';};
-const brl=v=>'R$ '+v.toFixed(2).replace('.',',');
-const fch=ch=>(ch||'').replace(/-/g,' ').toUpperCase();
-const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-const getRange=f=>{const now=new Date(),s=new Date();if(f==='today')s.setHours(0,0,0,0);else if(f==='yesterday'){s.setDate(now.getDate()-1);s.setHours(0,0,0,0);now.setDate(now.getDate()-1);now.setHours(23,59,59,999);}else if(f==='7d')s.setDate(now.getDate()-7);else if(f==='30d')s.setDate(now.getDate()-30);return{start:s,end:now};};
-const buildMap=()=>{const m={};sessions.forEach(s=>{const id=s.sessionId||s.id;if(id)m[id]=s;});return m;};
-
-/* ─────────────────────────────────────────────
-   CAMPOS DE CANAL válidos (exclui ruído)
-───────────────────────────────────────────── */
-const CH_F=['channel','channelDomain','source','utm_source','utmSource','origin'];
-const NOISE=['undefined','desconhecido','hercules_funil','direto','direct',''];
-const cleanCh=v=>v&&!NOISE.includes(String(v).toLowerCase().trim())?v:null;
-const getChFromObj=obj=>{for(const f of CH_F){const v=cleanCh(obj[f]);if(v)return v;}return null;};
-const matchCh=(obj,ch)=>obj&&CH_F.some(f=>obj[f]&&(obj[f]===ch||String(obj[f]).includes(ch)));
-
-/* ─────────────────────────────────────────────
-   IDADE — lê do funil corrigido (answers.idade é número)
-   Também lê a resposta textual e converte
-───────────────────────────────────────────── */
-const AGE_TEXT_MAP={
-  'entre 19 e 27 anos':23,'entre 28 e 36 anos':32,
-  'mais de 36 anos':42,'acima de 36 anos':42,
-  '19 a 27':23,'28 a 36':32,'36+':42,
+/* ══════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════ */
+const FB={
+  apiKey:"AIzaSyAs-REDACTED",
+  authDomain:"alytics-metodo-alpha.firebaseapp.com",
+  projectId:"alytics-metodo-alpha",
+  storageBucket:"alytics-metodo-alpha.appspot.com",
+  messagingSenderId:"REDACTED",
+  appId:"1:REDACTED:web:REDACTED"
 };
-const getAge=s=>{
-  if(!s)return null;
-  // 1. campo numérico direto na raiz (funil corrigido grava isso)
-  for(const f of['idade','age','userAge','user_age']){
-    const v=parseInt(s[f]);if(!isNaN(v)&&v>=10&&v<=120)return v;
-  }
-  // 2. dentro de answers
-  if(s.answers&&typeof s.answers==='object'){
-    // campo numérico explícito (funil corrigido: answers.idade = 23)
-    for(const k of['idade','age','userAge','q_idade']){
-      const v=parseInt(s.answers[k]);if(!isNaN(v)&&v>=10&&v<=120)return v;
+const CHANNELS=['doutor-cajado','doutor-reginaldo','doutor-saude','doutor-bigode','cajado-supremo'];
+const TQ=8, MATCH_MS=30*60*1000;
+
+/* ══════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════ */
+let sessions=[], sales=[], spyFilter='all';
+let schart=null, pchart=null;
+
+// Índices — populados pelo worker
+let idxSaleToSess = new Map(); // saleId  → session object
+let idxSessToSale = new Map(); // sessId  → sale object
+
+/* ══════════════════════════════════════════
+   WEB WORKER — toda computação pesada roda
+   num thread separado, nunca bloqueia a UI
+══════════════════════════════════════════ */
+const WORKER_SRC = `
+const CH_F=['channel','channelDomain','source','utm_source','utmSource','origin'];
+const NOISE=new Set(['undefined','desconhecido','hercules_funil','direto','direct','']);
+const getChFromObj=o=>{if(!o)return null;for(const f of CH_F){const v=o[f];if(v&&!NOISE.has(String(v).toLowerCase().trim()))return v;}return null;};
+
+// GUARDA: só status confirmados pelo gateway de pagamento
+const isPaid=s=>s.isPaid===true||s.paid===true||['pago','paid','approved','completed'].includes(String(s.status||'').toLowerCase());
+
+const toMs=ts=>{
+  if(!ts)return null;
+  if(ts.seconds)return ts.seconds*1000;
+  if(typeof ts==='number')return ts;
+  if(typeof ts==='string'){const d=new Date(ts);return isNaN(d)?null:d.getTime();}
+  return null;
+};
+
+self.onmessage=function(e){
+  const{sessions,sales}=e.data;
+
+  // Mapa id->sessao
+  const byId=new Map();
+  sessions.forEach(s=>{const id=s.sessionId||s.id;if(id)byId.set(id,s);});
+
+  // Indice de checkouts ordenado por tempo
+  const chkIdx=[];
+  sessions.forEach(s=>{
+    let ms=null;
+    if(s.events&&typeof s.events==='object'&&!Array.isArray(s.events)){
+      ms=toMs(s.events.checkout)||toMs(s.events.checkout_reached);
     }
-    // resposta textual da pergunta de idade (funil original)
-    const raw=s.answers['idade']||s.answers['age']||'';
-    const mapped=AGE_TEXT_MAP[raw.toLowerCase().trim()];
-    if(mapped)return mapped;
-    // varredura: qualquer número 10-120 nos valores
-    for(const val of Object.values(s.answers)){
-      // tenta mapeamento textual primeiro
-      const tm=AGE_TEXT_MAP[String(val).toLowerCase().trim()];
-      if(tm)return tm;
+    const step=s.currentStep;
+    if(!ms&&(step==='checkout'||step==='payment'))ms=toMs(s.lastActivity);
+    if(ms)chkIdx.push({ms,ch:getChFromObj(s),sid:s.sessionId||s.id});
+  });
+  chkIdx.sort((a,b)=>a.ms-b.ms);
+
+  const saleToSessId=new Map();
+  const sessToSaleId=new Map();
+
+  sales.forEach(sale=>{
+    // CRITICO: so processa vendas pagas pelo gateway — nunca checkout
+    if(!isPaid(sale))return;
+
+    const saleId=sale.id;
+
+    // 1. vinculo direto por sessionId
+    const directSid=sale.sessionId||sale.externalId||sale.session_id;
+    if(directSid&&byId.has(directSid)){
+      saleToSessId.set(saleId,directSid);
+      sessToSaleId.set(directSid,saleId);
+      return;
+    }
+
+    // 2. utm_source = sessionId (formato Wiapy)
+    const utmSid=sale.utm_source||sale.utmSource;
+    if(utmSid&&byId.has(utmSid)){
+      saleToSessId.set(saleId,utmSid);
+      sessToSaleId.set(utmSid,saleId);
+      return;
+    }
+
+    // 3. Cruzamento por tempo
+    // Regra: checkout da sessao deve ser ANTERIOR a venda (max 60min antes, 5min apos webhook)
+    const saleMs=toMs(sale.createdAt);
+    if(!saleMs)return;
+
+    const lo=saleMs-60*60*1000;  // ate 60min antes
+    const hi=saleMs+5*60*1000;   // 5min de margem para delay de webhook
+
+    let left=0,right=chkIdx.length;
+    while(left<right){const mid=(left+right)>>1;chkIdx[mid].ms<lo?left=mid+1:right=mid;}
+
+    const saleCh=getChFromObj(sale);
+    let bestSessId=null,bestScore=Infinity;
+    for(let i=left;i<chkIdx.length&&chkIdx[i].ms<=hi;i++){
+      const{ms,ch,sid:csid}=chkIdx[i];
+      if(sessToSaleId.has(csid))continue; // ja vinculado a outra venda
+      const diff=saleMs-ms; // positivo: checkout antes da venda (correto)
+      const same=saleCh&&ch&&(ch===saleCh||ch.includes(saleCh)||saleCh.includes(ch));
+      const score=same?diff:diff+60*60*1000*2; // penaliza canal diferente
+      if(score<bestScore){bestScore=score;bestSessId=csid;}
+    }
+    if(bestSessId){
+      saleToSessId.set(saleId,bestSessId);
+      sessToSaleId.set(bestSessId,saleId);
+    }
+  });
+
+  self.postMessage({saleToSessId:[...saleToSessId],sessToSaleId:[...sessToSaleId]});
+};
+`;
+
+// Cria o worker via Blob para não precisar de ficheiro separado
+const workerBlob = new Blob([WORKER_SRC], {type:'application/javascript'});
+const worker = new Worker(URL.createObjectURL(workerBlob));
+let workerBusy = false;
+let workerQueued = false; // houve nova mudança enquanto worker estava ocupado?
+
+worker.onmessage = function(e) {
+  const {saleToSessId, sessToSaleId} = e.data;
+  // Reconstrói maps com os IDs retornados
+  idxSaleToSess.clear();
+  idxSessToSale.clear();
+  const sessById = new Map();
+  sessions.forEach(s=>{const id=s.sessionId||s.id;if(id)sessById.set(id,s);});
+  const salesById = new Map();
+  sales.forEach(s=>salesById.set(s.id,s));
+  saleToSessId.forEach(([saleId,sessId])=>{const s=sessById.get(sessId);if(s)idxSaleToSess.set(saleId,s);});
+  sessToSaleId.forEach(([sessId,saleId])=>{const s=salesById.get(saleId);if(s&&isPaid(s))idxSessToSale.set(sessId,s);});
+
+  workerBusy = false;
+  // Se mudou enquanto processava, roda de novo
+  if(workerQueued){ workerQueued=false; dispatchWorker(); }
+  else { renderAll(); }
+};
+
+function dispatchWorker() {
+  if(workerBusy){ workerQueued=true; return; }
+  workerBusy=true;
+  // Serializa apenas os campos necessários para não transferir objetos enormes
+  const sessMin=sessions.map(s=>({
+    id:s.id, sessionId:s.sessionId,
+    channel:s.channel, channelDomain:s.channelDomain, source:s.source,
+    utm_source:s.utm_source, utmSource:s.utmSource, origin:s.origin,
+    currentStep:s.currentStep, lastActivity:s.lastActivity,
+    events:s.events
+  }));
+  const salesMin=sales.map(s=>({
+    id:s.id, sessionId:s.sessionId, externalId:s.externalId,
+    utm_source:s.utm_source, utmSource:s.utmSource,
+    channel:s.channel, channelDomain:s.channelDomain, source:s.source,
+    createdAt:s.createdAt, isPaid:s.isPaid, paid:s.paid, status:s.status,
+    paymentMethod:s.paymentMethod, amount:s.amount
+  }));
+  worker.postMessage({sessions:sessMin, sales:salesMin});
+}
+
+/* ══════════════════════════════════════════
+   HELPERS — todos síncronos e baratos
+══════════════════════════════════════════ */
+const toDate=ts=>{
+  if(!ts)return null;
+  if(ts.toDate)return ts.toDate();
+  if(ts.seconds)return new Date(ts.seconds*1000);
+  if(typeof ts==='string'||typeof ts==='number')return new Date(ts);
+  return null;
+};
+const isPaid=s=>s.isPaid===true||s.paid===true||['pago','paid','approved','completed'].includes(String(s.status||'').toLowerCase());
+const isOnline=ts=>{const d=toDate(ts);return d&&Date.now()-d.getTime()<300000;};
+const net=(v,m)=>m==='pix'?v*.95:v*.90;
+const ago=ts=>{
+  const d=toDate(ts);if(!d)return'---';
+  const s=Math.floor((Date.now()-d.getTime())/1000);
+  if(s<60)return'agora';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h';
+};
+const brl=v=>'R$\u00a0'+v.toFixed(2).replace('.',',');
+const fch=ch=>(ch||'').replace(/-/g,' ').toUpperCase();
+const $=id=>document.getElementById(id);
+const txt=(id,v)=>{const e=$(id);if(e){const s=String(v);if(e.textContent!==s)e.textContent=s;}};
+
+const getRange=f=>{
+  const now=new Date(),s=new Date();
+  if(f==='today')s.setHours(0,0,0,0);
+  else if(f==='yesterday'){s.setDate(now.getDate()-1);s.setHours(0,0,0,0);now.setDate(now.getDate()-1);now.setHours(23,59,59,999);}
+  else if(f==='7d')s.setDate(now.getDate()-7);
+  else if(f==='30d')s.setDate(now.getDate()-30);
+  return{start:s,end:now};
+};
+
+const CH_F=['channel','channelDomain','source','utm_source','utmSource','origin'];
+const NOISE=new Set(['undefined','desconhecido','hercules_funil','direto','direct','']);
+const getChFromObj=o=>{if(!o)return null;for(const f of CH_F){const v=o[f];if(v&&!NOISE.has(String(v).toLowerCase().trim()))return v;}return null;};
+const matchCh=(obj,ch)=>CH_F.some(f=>obj[f]&&(obj[f]===ch||String(obj[f]).includes(ch)));
+const getSaleCh=sale=>getChFromObj(sale)||getChFromObj(idxSaleToSess.get(sale.id));
+
+const AGE_MAP={'entre 19 e 27 anos':23,'entre 28 e 36 anos':32,'mais de 36 anos':42,'acima de 36 anos':42};
+const getAge=sess=>{
+  if(!sess)return null;
+  for(const f of['idade','age','userAge','user_age']){const v=parseInt(sess[f]);if(!isNaN(v)&&v>=10&&v<=120)return v;}
+  if(sess.answers&&typeof sess.answers==='object'){
+    for(const k of['idade','age','userAge','q_idade']){const v=parseInt(sess.answers[k]);if(!isNaN(v)&&v>=10&&v<=120)return v;}
+    for(const val of Object.values(sess.answers)){
+      const tm=AGE_MAP[String(val).toLowerCase().trim()];if(tm)return tm;
       const v=parseInt(val);if(!isNaN(v)&&v>=10&&v<=120)return v;
     }
   }
   return null;
 };
 
-/* ─────────────────────────────────────────────
-   CRUZAMENTO VENDA ↔ SESSÃO POR TEMPO
-   
-   Estratégia em cascata:
-   1. sessionId direto (se Wiapy devolver)
-   2. utm_source = sessionId (Wiapy passa sid na URL)
-   3. Sessão de checkout mais próxima ±30min no mesmo canal
-   4. Sessão de checkout mais próxima ±30min (qualquer canal)
-───────────────────────────────────────────── */
-function buildSaleSessionCache(){
-  saleSessionCache=new Map();
-  const map=buildMap();
-
-  sales.forEach(sale=>{
-    if(!isPaid(sale))return;
-    const saleId=sale.id;
-    const saleTime=toDate(sale.createdAt);
-
-    // 1. vínculo direto por sessionId
-    const directSid=sale.sessionId||sale.externalId||sale.session_id;
-    if(directSid&&map[directSid]){saleSessionCache.set(saleId,map[directSid]);return;}
-
-    // 2. utm_source pode ser o sessionId (formato s_TIMESTAMP_RANDOM)
-    const utmSid=sale.utm_source||sale.utmSource;
-    if(utmSid&&map[utmSid]){saleSessionCache.set(saleId,map[utmSid]);return;}
-
-    if(!saleTime)return;
-
-    // 3 & 4. cruzamento por tempo
-    // Candidatos: sessões que foram ao checkout dentro da janela de tempo
-    const saleChannel=getChFromObj(sale);
-    let best=null,bestDiff=Infinity;
-
-    sessions.forEach(sess=>{
-      // pega o timestamp do checkout desta sessão
-      let chkTime=null;
-      if(sess.events&&typeof sess.events==='object'&&!Array.isArray(sess.events)){
-        chkTime=toDate(sess.events['checkout'])||toDate(sess.events['checkout_reached']);
-      }
-      // fallback: usa lastActivity se a sessão está em checkout
-      if(!chkTime&&(sess.currentStep==='checkout'||sess.currentStep==='payment')){
-        chkTime=toDate(sess.lastActivity);
-      }
-      if(!chkTime)return;
-
-      const diff=Math.abs(saleTime.getTime()-chkTime.getTime());
-      if(diff>MATCH_WINDOW_MS)return; // fora da janela
-
-      // prefere sessão do mesmo canal
-      const sessChannel=getChFromObj(sess);
-      const sameChannel=saleChannel&&sessChannel&&(sessChannel===saleChannel||sessChannel.includes(saleChannel)||saleChannel.includes(sessChannel));
-      const score=sameChannel?diff:diff+MATCH_WINDOW_MS; // penaliza canal diferente
-
-      if(score<bestDiff){bestDiff=score;best=sess;}
-    });
-
-    if(best)saleSessionCache.set(saleId,best);
-  });
-}
-
-/* Retorna sessão vinculada a uma venda (usa cache) */
-const getSessForSale=sale=>saleSessionCache.get(sale.id)||null;
-
-/* Retorna canal resolvido de uma venda */
-const resolveChForSale=sale=>{
-  const direct=getChFromObj(sale);if(direct)return direct;
-  const sess=getSessForSale(sale);
-  if(sess)return getChFromObj(sess)||null;
-  return null;
-};
-
-/* ─────────────────────────────────────────────
-   FUNIL
-───────────────────────────────────────────── */
 const FSTEPS=['Entrou','Iniciou','Respondendo','Resultado','Checkout','Comprou'];
 const hasEv=(s,t)=>{
   if(s.currentStep===t)return true;
@@ -406,90 +521,129 @@ const hasEv=(s,t)=>{
   if(t==='quiz_completed'&&s.quizProgress>=TQ)return true;
   return false;
 };
-const isChk=s=>hasEv(s,'checkout')||hasEv(s,'checkout_reached')||['checkout','payment'].includes(s.currentStep);
+const isChk=s=>hasEv(s,'checkout')||hasEv(s,'checkout_reached')||s.currentStep==='checkout'||s.currentStep==='payment';
 const fIdx=(s,hs)=>{if(hs)return 5;if(isChk(s))return 4;if(s.quizProgress>=TQ||hasEv(s,'quiz_completed'))return 3;if(s.quizProgress>0)return 2;if(hasEv(s,'quiz_started')||s.currentStep==='quiz')return 1;return 0;};
 const fLabel=(s,hs)=>{if(hs)return'💰 COMPROU!';if(isChk(s))return'💳 No Checkout';if(s.quizProgress>=TQ||hasEv(s,'quiz_completed'))return'✅ Vendo Resultado';if(s.quizProgress>0)return`📝 Quiz ${s.quizProgress}/${TQ}`;if(hasEv(s,'quiz_started')||s.currentStep==='quiz')return'📝 Iniciou Quiz';return'👋 Entrou no Funil';};
 
-/* ─────────────────────────────────────────────
-   RENDER ALL
-───────────────────────────────────────────── */
+/* ══════════════════════════════════════════
+   RENDERS — todos leves, sem computação pesada
+══════════════════════════════════════════ */
 function renderAll(){
-  renderKPIs();renderIns();renderCmp();
-  renderSalesList();renderSalesChart();
-  renderHM();renderPeak();
-  renderCh();renderSpy();
+  detectChanges();  // notificações antes de qualquer render
+  renderKPIs();
+  renderSpy();
+  requestAnimationFrame(()=>{
+    renderIns();
+    renderTips();
+    renderCmp();
+    renderSalesList();
+    renderSalesChart();
+    renderHM();
+    renderPeak();
+    renderCh();
+  });
 }
 
-/* KPIs */
+/* KPIs — O(n) simples */
 function renderKPIs(){
   const rt=getRange('today'),r7=getRange('7d');
-  const ts=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=rt.start&&d<=rt.end;});
-  const tv=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=rt.start&&d<=rt.end&&isPaid(s);});
+  const inRange=(s,r,df)=>{const d=toDate(s[df]||s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end;};
+  const ts=sessions.filter(s=>inRange(s,rt,'enteredAt'));
+  const tv=sales.filter(s=>inRange(s,rt,'createdAt')&&isPaid(s));
   const rev=tv.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
-  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
-  const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
-  set('k-access',ts.length);set('k-sales',tv.length);set('k-rev',brl(rev));
-  set('k-chk',ts.filter(s=>isChk(s)).length);
-  set('k-quiz',ts.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length);
-  set('k-conv',s7.length>0?(v7.length/s7.length*100).toFixed(1)+'%':'0%');
-  set('online-count',sessions.filter(s=>isOnline(s.lastActivity)).length);
-  set('online-sub',`${sessions.length} sessões · ${saleSessionCache.size} vendas vinculadas`);
-  set('status-text','🟢 Sincronizado em tempo real');
+  const s7=sessions.filter(s=>inRange(s,r7,'enteredAt'));
+  const v7=sales.filter(s=>inRange(s,r7,'createdAt')&&isPaid(s));
+  const online=sessions.filter(s=>isOnline(s.lastActivity)).length;
+  txt('k-access',ts.length);txt('k-sales',tv.length);txt('k-rev',brl(rev));
+  txt('k-chk',ts.filter(s=>isChk(s)).length);
+  txt('k-quiz',ts.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length);
+  txt('k-conv',s7.length>0?(v7.length/s7.length*100).toFixed(1)+'%':'0%');
+  txt('online-count',online);
+  txt('online-sub',`${sessions.length} sessões · ${idxSaleToSess.size} vinculadas`);
+  txt('status-text','🟢 Tempo real ativo');
 }
 
 /* INSIGHTS */
 function renderIns(){
-  const r7=getRange('7d');
+  const r7=getRange('7d'), r30=getRange('30d'), rt=getRange('today');
   const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
   const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
-  const tS=s7.length,tV=v7.length,tC=s7.filter(s=>isChk(s)).length;
-  const rev=v7.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const s30=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
+  const v30=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r30.start&&isPaid(s);});
+  const st=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=rt.start;});
+  const vt=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=rt.start&&isPaid(s);});
+
+  const tV=v7.length, tC=s7.filter(s=>isChk(s)).length;
+  const rev7=v7.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const rev30=v30.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const revToday=vt.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
   const cards=[];
 
-  const v1k=tS>0?(tV/tS*1000).toFixed(1):0;
-  cards.push({t:'',e:'📈',tl:'Vendas / 1000 Acessos',v:v1k,d:`<strong>${v1k}</strong> vendas por 1000 acessos orgânicos`});
+  // Vendas por 1000
+  const v1k=s7.length>0?(tV/s7.length*1000).toFixed(1):0;
+  cards.push({t:'',e:'📈',tl:'Vendas/1000 Acessos',v:v1k,d:`<strong>${v1k}</strong> por 1k acessos orgânicos — 7 dias`});
 
+  // Abandono checkout
   const abn=tC>0?((tC-tV)/tC*100).toFixed(1):0;
-  cards.push({t:abn>50?'danger':'warn',e:'🛒',tl:'Abandono de Checkout',v:`${abn}%`,d:`<strong>${abn}%</strong> chegam ao checkout mas não finalizam`});
+  cards.push({t:abn>50?'danger':abn>30?'warn':'',e:'🛒',tl:'Abandono Checkout',v:`${abn}%`,d:`${tC} chegaram · ${tV} compraram · <strong>${abn}%</strong> saíram`});
 
+  // Retenção quiz
   const tQS=s7.filter(s=>hasEv(s,'quiz_started')||s.quizProgress>0).length;
   const tQC=s7.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length;
   const ret=tQS>0?(tQC/tQS*100).toFixed(1):0;
-  cards.push({t:ret>60?'':'warn',e:'📝',tl:'Retenção do Quiz',v:`${ret}%`,d:`<strong>${ret}%</strong> chegam ao final do quiz`});
+  cards.push({t:ret>60?'':'warn',e:'📝',tl:'Retenção Quiz',v:`${ret}%`,d:`${tQS} iniciaram · ${tQC} finalizaram — 7 dias`});
 
-  const tick=tV>0?(rev/tV).toFixed(2):0;
-  cards.push({t:'',e:'💲',tl:'Ticket Médio Líquido',v:brl(parseFloat(tick)),d:`Média por venda nos últimos 7 dias`});
-  cards.push({t:'',e:'🔮',tl:'Projeção Mensal',v:brl(rev/7*30),d:`Projeção baseada nos últimos 7 dias`});
+  // Ticket médio
+  const tick=tV>0?(rev7/tV):0;
+  cards.push({t:'',e:'💲',tl:'Ticket Médio',v:brl(tick),d:`Média líquida por venda — 7 dias`});
 
-  // IDADE — usa getSessForSale (cruzamento por tempo) + AGE_TEXT_MAP
+  // Receita hoje
+  cards.push({t:'',e:'☀️',tl:'Receita Hoje',v:brl(revToday),d:`${vt.length} venda${vt.length!==1?'s':''} · ${st.length} acesso${st.length!==1?'s':''} hoje`});
+
+  // Receita 30 dias
+  cards.push({t:'',e:'📆',tl:'Receita 30 Dias',v:brl(rev30),d:`${v30.length} vendas · média ${brl(rev30/30)}/dia`});
+
+  // Projeção mensal
+  cards.push({t:'',e:'🔮',tl:'Projeção Mensal',v:brl(rev7/7*30),d:`Baseada nos últimos 7 dias`});
+
+  // Taxa de conversão funil completo
+  const convFull=s7.length>0?(tV/s7.length*100).toFixed(2):0;
+  cards.push({t:convFull<0.5?'danger':convFull<1.5?'warn':'',e:'🎯',tl:'Conv. Funil Completo',v:`${convFull}%`,d:`${s7.length} acessos → ${tV} compras — 7 dias`});
+
+  // Conv. checkout→venda
+  const convChk=tC>0?(tV/tC*100).toFixed(1):0;
+  cards.push({t:convChk<40?'danger':convChk<60?'warn':'',e:'💳',tl:'Conv. Checkout→Venda',v:`${convChk}%`,d:`De quem chega ao checkout, <strong>${convChk}%</strong> finaliza`});
+
+  // Idade média compradores
   let totAge=0,ageCnt=0;
-  v7.forEach(sale=>{
-    const sess=getSessForSale(sale);
-    const a=getAge(sess);
-    if(a!==null){totAge+=a;ageCnt++;}
-  });
+  v7.forEach(s=>{const a=getAge(idxSaleToSess.get(s.id));if(a!==null){totAge+=a;ageCnt++;}});
   const avgAge=ageCnt>0?(totAge/ageCnt).toFixed(1):'---';
-  cards.push({
-    t:ageCnt>0?'':'warn',e:'👴',tl:'Idade Média Compradores',
-    v:`${avgAge} anos`,
-    d:ageCnt>0
-      ?`<strong>${avgAge} anos</strong> média · ${ageCnt} de ${tV} vendas com sessão vinculada`
-      :`Sessões ainda não vinculadas — aguarde novos dados ou publique o funil corrigido`
-  });
+  cards.push({t:ageCnt>0?'':'warn',e:'👤',tl:'Idade Média Compradores',v:`${avgAge} anos`,
+    d:ageCnt>0?`<strong>${avgAge} anos</strong> — ${ageCnt} de ${tV} vinculados`:`Aguardando sessões vinculadas`});
 
-  // Melhor canal (usa resolveChForSale)
+  // Método de pagamento predominante
+  const byPay={};
+  v30.forEach(s=>{const m=(s.paymentMethod||'pix').toLowerCase();byPay[m]=(byPay[m]||0)+1;});
+  const topPay=Object.entries(byPay).sort((a,b)=>b[1]-a[1])[0];
+  if(topPay) cards.push({t:'',e:'💸',tl:'Método Preferido',v:topPay[0].toUpperCase(),d:`<strong>${topPay[1]}</strong> de ${v30.length} vendas — 30 dias`});
+
+  // Melhor canal (conversão)
   const chConv=CHANNELS.map(ch=>{
     const sc=s7.filter(s=>matchCh(s,ch));
-    const vc=v7.filter(s=>{
-      const c=resolveChForSale(s);
-      return c&&(c===ch||c.includes(ch));
-    });
-    return{ch,conv:sc.length>0?vc.length/sc.length*100:0,sales:vc.length};
+    const vc=v7.filter(s=>{const c=getSaleCh(s);return c&&(c===ch||c.includes(ch));});
+    return{ch,conv:sc.length>0?vc.length/sc.length*100:0,sales:vc.length,sess:sc.length};
   });
   const best=[...chConv].sort((a,b)=>b.conv-a.conv)[0];
-  if(best&&best.conv>0) cards.push({t:'',e:'🏆',tl:'Melhor Canal',v:fch(best.ch),d:`Conv. <strong>${best.conv.toFixed(1)}%</strong> · ${best.sales} vendas`});
+  if(best&&best.conv>0) cards.push({t:'',e:'🏆',tl:'Melhor Canal',v:fch(best.ch),d:`Conv. <strong>${best.conv.toFixed(1)}%</strong> · ${best.sales} vendas de ${best.sess} acessos`});
 
-  const el=document.getElementById('ins-grid');if(!el)return;
+  // Custo de oportunidade (checkouts perdidos)
+  const lostChk=tC-tV;
+  if(lostChk>0){
+    const lostRev=lostChk*tick;
+    cards.push({t:'danger',e:'💔',tl:'Receita Perdida no Checkout',v:brl(lostRev),d:`${lostChk} checkout${lostChk!==1?'s':''} abandonado${lostChk!==1?'s':''} × ${brl(tick)} ticket — 7 dias`});
+  }
+
+  const el=$('ins-grid');if(!el)return;
   el.innerHTML=cards.map(c=>`<div class="ins-card ${c.t}"><span class="ins-e">${c.e}</span><div class="ins-t">${c.tl}</div><div class="ins-v">${c.v}</div><div class="ins-d">${c.d}</div></div>`).join('');
 }
 
@@ -497,51 +651,44 @@ function renderIns(){
 function renderCmp(){
   const periods=['today','yesterday','7d','30d'];
   const metrics=[
-    {n:'Acessos',fn:s=>true,src:'sessions',df:'enteredAt'},
+    {n:'Acessos',fn:()=>true,src:'sessions',df:'enteredAt'},
     {n:'Iniciou Quiz',fn:s=>hasEv(s,'quiz_started')||s.quizProgress>0,src:'sessions',df:'enteredAt'},
     {n:'Completou Quiz',fn:s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed'),src:'sessions',df:'enteredAt'},
     {n:'Checkout',fn:s=>isChk(s),src:'sessions',df:'enteredAt'},
     {n:'Vendas',fn:s=>isPaid(s),src:'sales',df:'createdAt'},
   ];
-  const b=document.getElementById('cmp-body');if(!b)return;
+  const b=$('cmp-body');if(!b)return;
   b.innerHTML=metrics.map(mt=>{
-    const vals=periods.map(p=>{const r=getRange(p),arr=mt.src==='sales'?sales:sessions;return arr.filter(s=>{const d=toDate(s[mt.df]||s.lastActivity);return d&&d>=r.start&&d<=r.end&&mt.fn(s);}).length;});
-    return`<tr><td class="cl">${mt.n}</td>${vals.map((v,i)=>`<td class="cv ${i===0&&v>0?'hi':''}">${v}</td>`).join('')}</tr>`;
+    const vals=periods.map(p=>{
+      const r=getRange(p),arr=mt.src==='sales'?sales:sessions;
+      return arr.filter(s=>{const d=toDate(s[mt.df]||s.lastActivity);return d&&d>=r.start&&d<=r.end&&mt.fn(s);}).length;
+    });
+    return`<tr><td class="cl">${mt.n}</td>${vals.map((v,i)=>`<td class="cv${i===0&&v>0?' hi':''}">${v}</td>`).join('')}</tr>`;
   }).join('');
 }
 
 /* SALES LIST */
 function renderSalesList(){
-  const f=document.getElementById('date-filter')?.value||'7d',r=getRange(f);
+  const f=$('date-filter')?.value||'7d',r=getRange(f);
   const list=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r.start&&d<=r.end&&isPaid(s);}).sort((a,b)=>toDate(b.createdAt)-toDate(a.createdAt));
-  const el=document.getElementById('sales-list');if(!el)return;
+  const el=$('sales-list');if(!el)return;
   if(!list.length){el.innerHTML='<div class="empty">Nenhuma venda no período</div>';return;}
   el.innerHTML=list.slice(0,15).map(sale=>{
-    const sess=getSessForSale(sale);
-    const age=getAge(sess);
-    const ch=resolveChForSale(sale);
-    const linked=!!sess;
-    return`<div class="si">
-      <div class="si-av">${(sale.customerName||'?').charAt(0).toUpperCase()}</div>
-      <div class="si-info">
-        <div class="si-name">${sale.customerName||'Cliente Alpha'}${age?` · ${age}a`:''}</div>
-        <div class="si-meta">${ago(sale.createdAt)} · ${(sale.paymentMethod||'PIX').toUpperCase()}${linked?'':' · sem sessão'}</div>
-        ${ch?`<div class="si-ch">📡 ${fch(ch)}</div>`:''}
-      </div>
-      <div class="si-amt">${brl(net(sale.amount||0,sale.paymentMethod))}</div>
-    </div>`;
+    const sess=idxSaleToSess.get(sale.id);
+    const age=getAge(sess),ch=getSaleCh(sale);
+    return`<div class="si"><div class="si-av">${(sale.customerName||'?').charAt(0).toUpperCase()}</div><div class="si-info"><div class="si-name">${sale.customerName||'Cliente Alpha'}${age?` · ${age}a`:''}</div><div class="si-meta">${ago(sale.createdAt)} · ${(sale.paymentMethod||'PIX').toUpperCase()}</div>${ch?`<div class="si-ch">📡 ${fch(ch)}</div>`:''}</div><div class="si-amt">${brl(net(sale.amount||0,sale.paymentMethod))}</div></div>`;
   }).join('');
 }
 
 /* SALES CHART */
 function renderSalesChart(){
-  const f=document.getElementById('date-filter')?.value||'7d',r=getRange(f),byD={};
+  const f=$('date-filter')?.value||'7d',r=getRange(f),byD={};
   sales.forEach(s=>{if(!isPaid(s))return;const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end)return;const k=d.toLocaleDateString('pt-BR');byD[k]=(byD[k]||0)+1;});
   const days=[],counts=[],cur=new Date(r.start);
   while(cur<=r.end){const k=cur.toLocaleDateString('pt-BR');days.push(k);counts.push(byD[k]||0);cur.setDate(cur.getDate()+1);}
-  const ctx=document.getElementById('salesChart');if(!ctx)return;
-  if(schart)schart.destroy();
-  schart=new Chart(ctx.getContext('2d'),{type:'line',data:{labels:days,datasets:[{label:'Vendas',data:counts,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.07)',borderWidth:2,fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#f59e0b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
+  const ctx=$('salesChart');if(!ctx)return;
+  if(schart){schart.data.labels=days;schart.data.datasets[0].data=counts;schart.update('none');return;}
+  schart=new Chart(ctx.getContext('2d'),{type:'line',data:{labels:days,datasets:[{data:counts,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.07)',borderWidth:2,fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#f59e0b'}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
 }
 
 /* HEATMAP */
@@ -550,10 +697,10 @@ function renderHM(){
   days.forEach(d=>{data[d]={};hrs.forEach(h=>{data[d][h]=0;});});
   sales.forEach(s=>{if(!isPaid(s))return;const d=toDate(s.createdAt);if(!d)return;const day=days[d.getDay()],h=d.getHours(),sl=h<4?'00h':h<8?'04h':h<12?'08h':h<16?'12h':h<20?'16h':'20h';data[day][sl]++;});
   let max=0;Object.values(data).forEach(d=>Object.values(d).forEach(v=>{if(v>max)max=v;}));
-  const el=document.getElementById('hm-wrap');if(!el)return;
+  const el=$('hm-wrap');if(!el)return;
   let html=`<table class="hmt"><thead><tr><th></th>${hrs.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-  days.forEach(d=>{html+=`<tr><td class="hm-day">${d}</td>`;hrs.forEach(h=>{const v=data[d][h],c=max>0&&v>0?(v/max>=.65?'h':v/max>=.3?'m':'l'):'e';html+=`<td class="hmc ${c}" title="${d} ${h}: ${v} vendas">${v||''}</td>`;});html+=`</tr>`;});
-  html+=`</tbody></table><div class="hm-leg"><div class="hm-li"><div class="hm-lc" style="background:rgba(34,197,94,.38)"></div>Alto</div><div class="hm-li"><div class="hm-lc" style="background:rgba(245,158,11,.28)"></div>Médio</div><div class="hm-li"><div class="hm-lc" style="background:rgba(239,68,68,.18)"></div>Baixo</div></div>`;
+  days.forEach(d=>{html+=`<tr><td class="hm-day">${d}</td>`;hrs.forEach(h=>{const v=data[d][h],c=max>0&&v>0?(v/max>=.65?'h':v/max>=.3?'m':'l'):'e';html+=`<td class="hmc ${c}" title="${d} ${h}: ${v}">${v||''}</td>`;});html+=`</tr>`;});
+  html+=`</tbody></table><div class="hm-leg"><div class="hm-li"><div class="hm-lc" style="background:rgba(34,197,94,.35)"></div>Alto</div><div class="hm-li"><div class="hm-lc" style="background:rgba(245,158,11,.25)"></div>Médio</div><div class="hm-li"><div class="hm-lc" style="background:rgba(239,68,68,.16)"></div>Baixo</div></div>`;
   el.innerHTML=html;
 }
 
@@ -563,95 +710,330 @@ function renderPeak(){
   sessions.forEach(s=>{const d=toDate(s.enteredAt);if(!d)return;const h=d.getHours();if(!byH[h])byH[h]=new Set();byH[h].add(s.sessionId||s.id);});
   const labels=Array.from({length:24},(_,i)=>i.toString().padStart(2,'0')+'h');
   const data=Array.from({length:24},(_,i)=>byH[i]?byH[i].size:0);
-  const ctx=document.getElementById('peakChart');if(!ctx)return;
-  if(pchart)pchart.destroy();
-  pchart=new Chart(ctx.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Visitantes',data,backgroundColor:'rgba(239,68,68,.3)',borderColor:'#ef4444',borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
+  const ctx=$('peakChart');if(!ctx)return;
+  if(pchart){pchart.data.labels=labels;pchart.data.datasets[0].data=data;pchart.update('none');return;}
+  pchart=new Chart(ctx.getContext('2d'),{type:'bar',data:{labels,datasets:[{data,backgroundColor:'rgba(239,68,68,.28)',borderColor:'#ef4444',borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5a5d6b',font:{size:9},stepSize:1}}}}});
 }
 
-/* CHANNELS — usa resolveChForSale */
+/* CHANNELS */
 function renderCh(){
-  const p=document.getElementById('ch-period')?.value||'7d',r=getRange(p);
-  const el=document.getElementById('ch-grid');if(!el)return;
+  const p=$('ch-period')?.value||'7d',r=getRange(p);
+  const el=$('ch-grid');if(!el)return;
   const data=CHANNELS.map(ch=>{
     const sc=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end&&matchCh(s,ch);});
-    const vc=sales.filter(s=>{
-      const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end||!isPaid(s))return false;
-      const c=resolveChForSale(s);
-      return c&&(c===ch||c.includes(ch));
-    });
+    const vc=sales.filter(s=>{const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end||!isPaid(s))return false;const c=getSaleCh(s);return c&&(c===ch||c.includes(ch));});
     const rev=vc.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
     const conv=sc.length>0?(vc.length/sc.length*100).toFixed(1):'0.0';
     return{ch,sc:sc.length,chk:sc.filter(s=>isChk(s)).length,sales:vc.length,rev,conv};
   }).sort((a,b)=>b.rev-a.rev);
   el.innerHTML=data.map(d=>{
-    const tier=d.sales>5?'best':d.sales>0?'good':'bad';
-    const badge=d.sales>5?'🏆 TOP':d.sales>0?'✅ ATIVO':'⚠️ SEM VENDA';
-    return`<div class="ch-card ${tier}">
-      <div class="ch-n">${fch(d.ch)}<span class="ch-bdg ${tier}">${badge}</span></div>
-      <div class="ch-ms">
-        <div class="ch-m"><div class="ch-mv">${d.sc}</div><div class="ch-ml">Acessos</div></div>
-        <div class="ch-m"><div class="ch-mv">${d.chk}</div><div class="ch-ml">Checkout</div></div>
-        <div class="ch-m"><div class="ch-mv">${d.sales}</div><div class="ch-ml">Vendas</div></div>
-      </div>
-      <div class="ch-rev"><div class="ch-rl">Receita Líquida · Conv. ${d.conv}%</div><div class="ch-rv">${brl(d.rev)}</div></div>
-    </div>`;
+    const t=d.sales>5?'best':d.sales>0?'good':'bad';
+    const b=d.sales>5?'🏆 TOP':d.sales>0?'✅ ATIVO':'⚠️ SEM VENDA';
+    return`<div class="ch-card ${t}"><div class="ch-n">${fch(d.ch)}<span class="ch-bdg ${t}">${b}</span></div><div class="ch-ms"><div class="ch-m"><div class="ch-mv">${d.sc}</div><div class="ch-ml">Acessos</div></div><div class="ch-m"><div class="ch-mv">${d.chk}</div><div class="ch-ml">Checkout</div></div><div class="ch-m"><div class="ch-mv">${d.sales}</div><div class="ch-ml">Vendas</div></div></div><div class="ch-rev"><div class="ch-rl">Receita · Conv. ${d.conv}%</div><div class="ch-rv">${brl(d.rev)}</div></div></div>`;
   }).join('');
 }
 
-/* SPY — vinculação com venda por tempo */
+/* SPY */
 window.setSpy=(f,btn)=>{spyFilter=f;document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSpy();};
 function renderSpy(){
-  const el=document.getElementById('spy-grid');if(!el)return;
-
-  // Monta mapa reverso: sessionId → venda (para espião mostrar R$ correto)
-  const sessToSale=new Map();
-  saleSessionCache.forEach((sess,saleId)=>{
-    const sale=sales.find(s=>s.id===saleId);
-    if(sale&&isPaid(sale))sessToSale.set(sess.sessionId||sess.id,sale);
-  });
-
-  const uniq=sessions.filter((v,i,a)=>a.findIndex(t=>(t.sessionId||t.id)===(v.sessionId||v.id))===i);
+  const el=$('spy-grid');if(!el)return;
+  const seen=new Set();
+  const uniq=sessions.filter(s=>{const id=s.sessionId||s.id;if(seen.has(id))return false;seen.add(id);return true;});
   let list=uniq;
-  if(spyFilter==='online') list=uniq.filter(s=>isOnline(s.lastActivity));
+  if(spyFilter==='online')   list=uniq.filter(s=>isOnline(s.lastActivity));
   if(spyFilter==='checkout') list=uniq.filter(s=>isChk(s));
-  if(spyFilter==='sale') list=uniq.filter(s=>sessToSale.has(s.sessionId||s.id));
-  list=list.sort((a,b)=>toDate(b.lastActivity)-toDate(a.lastActivity)).slice(0,48);
+  if(spyFilter==='sale')     list=uniq.filter(s=>idxSessToSale.has(s.sessionId||s.id));
+  list=list.sort((a,b)=>(toDate(b.lastActivity)||0)-(toDate(a.lastActivity)||0)).slice(0,40);
   if(!list.length){el.innerHTML='<div class="empty">Nenhum lead encontrado</div>';return;}
-  el.innerHTML=list.map(s=>{
-    const online=isOnline(s.lastActivity),sid=s.sessionId||s.id,short=sid.substr(-6).toUpperCase();
-    const sale=sessToSale.get(sid),hasSale=!!sale;
-    const chk=isChk(s),n=hasSale?net(sale.amount||0,sale.paymentMethod).toFixed(2):0;
+  const next=list.map(s=>{
+    const sid=s.sessionId||s.id;
+    const online=isOnline(s.lastActivity);
+    const short=sid.substr(-6).toUpperCase();
+    const sale=idxSessToSale.get(sid);
+    const hasSale=!!sale;
+    const chk=isChk(s);
+    const n=hasSale?net(sale.amount||0,sale.paymentMethod).toFixed(2):0;
     const fi=fIdx(s,hasSale),fl=fLabel(s,hasSale);
     const ch=getChFromObj(s);
-    const bar=FSTEPS.map((_,i)=>`<div class="fs ${i<fi?'done':i===fi?'now':''}"></div>`).join('');
-    return`<div class="spy-item ${hasSale?'sale':chk?'checkout':''}">
-      <div class="spy-av">${short.charAt(0)}</div>
-      <div class="spy-b">
-        <div class="spy-row"><div class="spy-id">Lead #${short}</div><div class="spy-t">${ago(s.lastActivity)}</div></div>
-        <div class="spy-st ${hasSale?'sale':chk?'checkout':''}">${fl}</div>
-        ${ch?`<div class="spy-ch">📡 ${fch(ch)}</div>`:''}
-        <div class="spy-fun">${bar}</div>
-        <div class="f-lbl">${FSTEPS[fi]} · ${fi+1}/6</div>
-      </div>
-      <div class="spy-r">
-        ${online&&!hasSale?'<div class="odot"></div>':''}
-        ${chk&&!hasSale?'<div class="bchk">CHECKOUT</div>':''}
-        ${hasSale?`<div class="bsale">R$ ${n}</div>`:''}
-      </div>
-    </div>`;
+    const bar=FSTEPS.map((_,i)=>`<div class="fs${i<fi?' done':i===fi?' now':''}"></div>`).join('');
+    return`<div class="spy-item${hasSale?' sale':chk?' checkout':''}"><div class="spy-av">${short.charAt(0)}</div><div class="spy-b"><div class="spy-row"><div class="spy-id">Lead #${short}</div><div class="spy-t">${ago(s.lastActivity)}</div></div><div class="spy-st${hasSale?' sale':chk?' checkout':''}">${fl}</div>${ch?`<div class="spy-ch">📡 ${fch(ch)}</div>`:''}<div class="spy-fun">${bar}</div><div class="f-lbl">${FSTEPS[fi]} · ${fi+1}/6</div></div><div class="spy-r">${online&&!hasSale?'<div class="odot"></div>':''}${chk&&!hasSale?'<div class="bchk">CHK</div>':''}${hasSale?`<div class="bsale">R$\u00a0${n}</div>`:''}</div></div>`;
   }).join('');
+  if(el.innerHTML!==next) el.innerHTML=next;
 }
 
-/* FILTER CHANGE */
-window.onFilterChange=()=>{renderSalesList();renderSalesChart();renderCh();};
+/* FILTER CHANGE — só renderiza o que depende do filtro, sem worker */
+window.onFilter=()=>{
+  renderSalesList();
+  // Chart: atualiza dados sem destruir/recriar (usa chart.update)
+  const fS=$('date-filter')?.value||'7d',rS=getRange(fS),byD={};
+  sales.forEach(s=>{if(!isPaid(s))return;const d=toDate(s.createdAt);if(!d||d<rS.start||d>rS.end)return;const k=d.toLocaleDateString('pt-BR');byD[k]=(byD[k]||0)+1;});
+  const days=[],counts=[],cur=new Date(rS.start);
+  while(cur<=rS.end){const k=cur.toLocaleDateString('pt-BR');days.push(k);counts.push(byD[k]||0);cur.setDate(cur.getDate()+1);}
+  if(schart){schart.data.labels=days;schart.data.datasets[0].data=counts;schart.update('none');}
+  renderCh();
+};
 
-/* FIREBASE */
-const app=initializeApp(FB),db=getFirestore(app);
-onSnapshot(collection(db,'sessions'),snap=>{sessions=snap.docs.map(d=>({id:d.id,...d.data()}));scheduleRender();});
-onSnapshot(collection(db,'sales'),snap=>{sales=snap.docs.map(d=>({id:d.id,...d.data()}));scheduleRender();});
+/* ══════════════════════════════════════════
+   SONS — Web Audio API (sem arquivos externos)
+══════════════════════════════════════════ */
+let soundOn = false;
+let audioCtx = null;
 
-/* Espião suave a cada 5s */
-setInterval(()=>renderSpy(),5000);
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// Som de checkout: dois bips suaves ascendentes
+function playCheckoutSound(){
+  if(!soundOn) return;
+  try{
+    const ctx = getAudioCtx();
+    const t = ctx.currentTime;
+    [[440,.08],[554,.08],[659,.12]].forEach(([freq,delay],i)=>{
+      const osc=ctx.createOscillator(), gain=ctx.createGain();
+      osc.type='sine'; osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0,t+delay);
+      gain.gain.linearRampToValueAtTime(.28,t+delay+.03);
+      gain.gain.linearRampToValueAtTime(0,t+delay+.18);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t+delay); osc.stop(t+delay+.22);
+    });
+  }catch(e){}
+}
+
+// Som de venda: acorde de vitória brilhante
+function playSaleSound(){
+  if(!soundOn) return;
+  try{
+    const ctx = getAudioCtx();
+    const t = ctx.currentTime;
+    // acorde maior + glide final
+    [[523,.0,.22],[659,.0,.22],[784,.0,.22],[1047,.08,.3],[1319,.16,.35]].forEach(([freq,delay,dur])=>{
+      const osc=ctx.createOscillator(), gain=ctx.createGain();
+      osc.type='triangle'; osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0,t+delay);
+      gain.gain.linearRampToValueAtTime(.22,t+delay+.04);
+      gain.gain.exponentialRampToValueAtTime(.001,t+delay+dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t+delay); osc.stop(t+delay+dur+.05);
+    });
+  }catch(e){}
+}
+
+window.toggleSound = ()=>{
+  soundOn = !soundOn;
+  // Precisa de gesto do usuário para desbloquear AudioContext
+  if(soundOn && audioCtx && audioCtx.state==='suspended') audioCtx.resume();
+  const btn = $('snd-btn');
+  if(btn){ btn.textContent = soundOn ? '🔊 SOM ON' : '🔇 SOM OFF'; btn.className = soundOn ? 'snd-btn on' : 'snd-btn'; }
+  if(soundOn) playSaleSound(); // preview
+};
+
+/* ══════════════════════════════════════════
+   TOASTS
+══════════════════════════════════════════ */
+function showToast(type, title, sub){
+  const wrap = $('toast-wrap'); if(!wrap) return;
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<div class="toast-icon">${type==='sale'?'💰':'🛒'}</div><div><div>${title}</div><div class="toast-sub">${sub}</div></div>`;
+  wrap.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350);}, 4500);
+}
+
+/* ══════════════════════════════════════════
+   RASTREAMENTO DE MUDANÇAS (para notificações)
+   Compara snapshot anterior com atual
+══════════════════════════════════════════ */
+const prevChk  = new Set(); // sessIds que já estavam em checkout
+const prevSale = new Set(); // saleIds que já eram pagos
+let firstLoad  = true;      // ignora na primeira carga
+
+function detectChanges(){
+  if(firstLoad){ 
+    // popula sets sem notificar
+    sessions.forEach(s=>{ if(isChk(s)) prevChk.add(s.sessionId||s.id); });
+    sales.forEach(s=>{ if(isPaid(s)) prevSale.add(s.id); });
+    firstLoad = false;
+    return;
+  }
+
+  // Novos checkouts
+  sessions.forEach(s=>{
+    const sid = s.sessionId||s.id;
+    if(isChk(s) && !prevChk.has(sid)){
+      prevChk.add(sid);
+      const ch = getChFromObj(s)||'';
+      playCheckoutSound();
+      showToast('chk','🛒 Novo Checkout!', ch ? `Canal: ${fch(ch)}` : 'Lead chegou ao pagamento');
+    }
+  });
+
+  // Novas vendas pagas
+  sales.forEach(s=>{
+    if(isPaid(s) && !prevSale.has(s.id)){
+      prevSale.add(s.id);
+      const val = net(s.amount||0, s.paymentMethod);
+      const ch  = getSaleCh(s)||'';
+      playSaleSound();
+      showToast('sale',`💰 VENDA! ${brl(val)}`, ch ? `Canal: ${fch(ch)}` : (s.customerName||'Cliente Alpha'));
+    }
+  });
+}
+
+/* ══════════════════════════════════════════
+   ABA INTEL
+══════════════════════════════════════════ */
+window.setITab = (tab, btn)=>{
+  document.querySelectorAll('.itab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ipanel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  $('ip-'+tab)?.classList.add('active');
+};
+
+/* ══════════════════════════════════════════
+   RENDERIZA DICAS
+══════════════════════════════════════════ */
+function renderTips(){
+  const r7=getRange('7d'), r30=getRange('30d');
+  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
+  const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
+  const s30=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
+  const v30=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r30.start&&isPaid(s);});
+
+  const tS=s7.length, tV=v7.length, tC=s7.filter(s=>isChk(s)).length;
+  const tQS=s7.filter(s=>hasEv(s,'quiz_started')||s.quizProgress>0).length;
+  const tQC=s7.filter(s=>s.quizProgress>=TQ||hasEv(s,'quiz_completed')).length;
+  const conv7 = tS>0? tV/tS*100 : 0;
+  const abn   = tC>0? (tC-tV)/tC*100 : 0;
+  const ret   = tQS>0? tQC/tQS*100 : 0;
+  const rev7  = v7.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
+  const tick  = tV>0? rev7/tV : 0;
+
+  // Melhor horário de venda
+  const byH={};
+  v30.forEach(s=>{const d=toDate(s.createdAt);if(!d)return;const h=d.getHours();byH[h]=(byH[h]||0)+1;});
+  const bestH = Object.entries(byH).sort((a,b)=>b[1]-a[1])[0];
+  const bestHour = bestH ? `${bestH[0]}h–${parseInt(bestH[0])+1}h` : null;
+
+  // Melhor dia da semana
+  const byDow={};
+  const dowNames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  v30.forEach(s=>{const d=toDate(s.createdAt);if(!d)return;const dow=d.getDay();byDow[dow]=(byDow[dow]||0)+1;});
+  const bestDow = Object.entries(byDow).sort((a,b)=>b[1]-a[1])[0];
+  const bestDay = bestDow ? dowNames[parseInt(bestDow[0])] : null;
+
+  // Canal com mais abandono
+  const chAbn = CHANNELS.map(ch=>{
+    const sc=s7.filter(s=>matchCh(s,ch)&&isChk(s));
+    const vc=v7.filter(s=>{const c=getSaleCh(s);return c&&(c===ch||c.includes(ch));});
+    return{ch, chk:sc.length, sales:vc.length, abn:sc.length>0?(sc.length-vc.length)/sc.length*100:0};
+  }).filter(c=>c.chk>0).sort((a,b)=>b.abn-a.abn)[0];
+
+  const tips = [];
+
+  /* ── ABANDONO CHECKOUT ── */
+  if(abn > 60){
+    tips.push({cls:'urgent',badge:'urgent',icon:'🚨',title:'Abandono crítico no checkout',
+      desc:`<strong>${abn.toFixed(0)}%</strong> das pessoas chegam ao pagamento mas não compram. Principais causas: preço percebido como alto, formulário longo, falta de prova social na página de checkout, ou boleto/pix como único método. Tente adicionar um gatilho de escassez na página de pagamento (ex: "Apenas X vagas com esse desconto") e garanta que o botão de compra seja visível sem scroll.`});
+  } else if(abn > 35){
+    tips.push({cls:'warn',badge:'warn',icon:'⚠️',title:'Abandono de checkout acima do ideal',
+      desc:`<strong>${abn.toFixed(0)}%</strong> de abandono no checkout. Considere adicionar um timer de urgência na página de pagamento, depoimentos visíveis e garantia explícita. Abandono ideal para produtos digitais orgânicos é abaixo de 30%.`});
+  } else {
+    tips.push({cls:'good',badge:'good',icon:'✅',title:'Checkout com boa conversão',
+      desc:`Apenas <strong>${abn.toFixed(0)}%</strong> de abandono no checkout — excelente! Continue testando variações de headline e prova social para ir além.`});
+  }
+
+  /* ── RETENÇÃO QUIZ ── */
+  if(ret < 40){
+    tips.push({cls:'urgent',badge:'urgent',icon:'📉',title:'Quiz perdendo pessoas rápido',
+      desc:`Só <strong>${ret.toFixed(0)}%</strong> concluem o quiz. Isso mata sua taxa de conversão antes do checkout. Revise as primeiras 3 perguntas — elas precisam ser rápidas, pessoais e criar curiosidade. Perguntas sobre resultado/diagnóstico tendem a ter retenção maior que perguntas sobre hábitos.`});
+  } else if(ret < 65){
+    tips.push({cls:'warn',badge:'warn',icon:'📊',title:'Retenção do quiz pode melhorar',
+      desc:`<strong>${ret.toFixed(0)}%</strong> completam o quiz. Adicione micro-progressos visuais ("Você está quase lá!"), reduza o número de perguntas ou torne as respostas mais rápidas com opções visuais (emojis/imagens) em vez de texto puro.`});
+  }
+
+  /* ── TAXA DE CONVERSÃO GERAL ── */
+  if(conv7 < 0.5){
+    tips.push({cls:'urgent',badge:'urgent',icon:'🎯',title:'Conversão geral muito baixa',
+      desc:`<strong>${conv7.toFixed(2)}%</strong> dos visitantes compram. Para orgânico no TikTok, o ideal é acima de 1%. Verifique se o tráfego está qualificado — pessoas que clicam em vídeos de problema específico convertem muito mais que tráfego de vídeos virais genéricos.`});
+  } else if(conv7 < 1.5){
+    tips.push({cls:'warn',badge:'warn',icon:'📈',title:'Conversão pode melhorar',
+      desc:`<strong>${conv7.toFixed(2)}%</strong> de conversão. Para escalar, foque em aumentar o volume de sessões qualificadas — crie mais vídeos com CTA direto para o funil, usando hooks específicos do problema que seu produto resolve.`});
+  } else {
+    tips.push({cls:'good',badge:'good',icon:'🚀',title:'Boa taxa de conversão!',
+      desc:`<strong>${conv7.toFixed(2)}%</strong> de conversão — acima da média para orgânico. Hora de escalar volume: mais vídeos, mais canais, maior frequência de postagem.`});
+  }
+
+  /* ── HORÁRIO DE PICO ── */
+  if(bestHour){
+    tips.push({cls:'info',badge:'info',icon:'⏰',title:`Melhor horário: ${bestHour}`,
+      desc:`Nos últimos 30 dias, seu pico de vendas é às <strong>${bestHour}</strong>. Programe seus posts para 2–3h antes desse horário para aquecer o público antes do momento de compra. Se estiver usando CTA direto ("link na bio"), poste exatamente no horário de pico.`});
+  }
+
+  /* ── MELHOR DIA ── */
+  if(bestDay){
+    tips.push({cls:'info',badge:'info',icon:'📅',title:`Melhor dia: ${bestDay}`,
+      desc:`<strong>${bestDay}</strong> é o dia com mais vendas nos últimos 30 dias. Concentre suas postagens mais agressivas nesse dia e no dia anterior para maximizar alcance quando seu público está mais propenso a comprar.`});
+  }
+
+  /* ── CANAL COM MAIS ABANDONO ── */
+  if(chAbn && chAbn.abn > 50){
+    tips.push({cls:'warn',badge:'warn',icon:'📡',title:`${fch(chAbn.ch)}: alto abandono no checkout`,
+      desc:`O canal <strong>${fch(chAbn.ch)}</strong> leva muitas pessoas ao checkout (<strong>${chAbn.chk}</strong>) mas fecha poucas vendas (<strong>${chAbn.sales}</strong>). O público desse canal pode ter objeção de preço diferente — teste uma oferta exclusiva ou um bonus específico para esse canal.`});
+  }
+
+  /* ── TICKET MÉDIO ── */
+  if(tick > 0 && tick < 50){
+    tips.push({cls:'warn',badge:'warn',icon:'💵',title:'Ticket médio baixo — opportunity de upsell',
+      desc:`Ticket médio de <strong>${brl(tick)}</strong>. Se você não tem order bump ou upsell imediato pós-compra, está deixando dinheiro na mesa. Mesmo um produto complementar de R$ 27–47 na página de obrigado pode aumentar o faturamento em 20–40% sem custo de aquisição extra.`});
+  }
+
+  /* ── VOLUME ── */
+  if(tS < 30){
+    tips.push({cls:'info',badge:'info',icon:'📢',title:'Volume de tráfego baixo',
+      desc:`Com <strong>${tS}</strong> sessões em 7 dias, você precisa de mais volume para ter dados confiáveis e escalar. Meta mínima: 100+ sessões/semana. Aumente frequência de postagem para 3–5 vídeos/dia por canal ou expanda para novos canais.`});
+  }
+
+  /* ── DICA SEMPRE PRESENTE: FUNIL DE CONTEÚDO ── */
+  tips.push({cls:'info',badge:'info',icon:'🎬',title:'Estratégia de conteúdo: funil TOFU → MOFU → BOFU',
+    desc:`Para orgânico funcionar em escala, você precisa de 3 tipos de vídeo: <strong>TOFU</strong> (problema/dor, vídeos virais que alcançam frios), <strong>MOFU</strong> (solução/mecanismo, explica por que seu produto funciona), e <strong>BOFU</strong> (prova social, resultados, CTA direto). Proporção ideal: 50% TOFU, 30% MOFU, 20% BOFU.`});
+
+  const el=$('tips-list'); if(!el) return;
+  el.innerHTML = tips.map(t=>`
+    <div class="tip ${t.cls}">
+      <div class="tip-icon">${t.icon}</div>
+      <div class="tip-body">
+        <span class="tip-badge ${t.badge}">${t.badge==='urgent'?'URGENTE':t.badge==='warn'?'ATENÇÃO':t.badge==='good'?'BOM':'DICA'}</span>
+        <div class="tip-title">${t.title}</div>
+        <div class="tip-desc">${t.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   FIREBASE — onSnapshot dispara worker
+   Worker retorna índices → renderAll()
+══════════════════════════════════════════ */
+const app=initializeApp(FB), db=getFirestore(app);
+
+onSnapshot(collection(db,'sessions'),snap=>{
+  sessions=snap.docs.map(d=>({id:d.id,...d.data()}));
+  dispatchWorker();
+});
+onSnapshot(collection(db,'sales'),snap=>{
+  sales=snap.docs.map(d=>({id:d.id,...d.data()}));
+  dispatchWorker();
+});
+
+/* Spy atualiza a cada 4s — apenas texto, sem recalcular índices */
+let spyTick=null;
+const startSpyTick=()=>{spyTick=setInterval(()=>{if(!document.hidden)renderSpy();},4000);};
+const stopSpyTick=()=>clearInterval(spyTick);
+document.addEventListener('visibilitychange',()=>document.hidden?stopSpyTick():startSpyTick());
+startSpyTick();
 </script>
 </body>
 </html>
