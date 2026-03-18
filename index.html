@@ -365,10 +365,22 @@ const toMs=ts=>{
 };
 self.onmessage=function(e){
   const{sessions,sales}=e.data;
+  
+  // DEDUPLICAR SESSÕES POR sessionId/id — pega a mais recente
   const byId=new Map();
-  sessions.forEach(s=>{const id=s.sessionId||s.id;if(id)byId.set(id,s);});
-  const chkIdx=[];
   sessions.forEach(s=>{
+    const id=s.sessionId||s.id;
+    if(!id)return;
+    const existing=byId.get(id);
+    if(!existing||toMs(s.lastActivity)>toMs(existing.lastActivity)){
+      byId.set(id,s);
+    }
+  });
+  
+  const uniqueSessions=Array.from(byId.values());
+  
+  const chkIdx=[];
+  uniqueSessions.forEach(s=>{
     let ms=null;
     if(s.events&&typeof s.events==='object'&&!Array.isArray(s.events)){
       ms=toMs(s.events.checkout)||toMs(s.events.checkout_reached);
@@ -378,8 +390,10 @@ self.onmessage=function(e){
     if(ms)chkIdx.push({ms,ch:getChFromObj(s),sid:s.sessionId||s.id});
   });
   chkIdx.sort((a,b)=>a.ms-b.ms);
+  
   const saleToSessId=new Map();
   const sessToSaleId=new Map();
+  
   sales.forEach(sale=>{
     if(!isPaid(sale))return;
     const saleId=sale.id;
@@ -404,6 +418,7 @@ self.onmessage=function(e){
     }
     if(bestSessId){saleToSessId.set(saleId,bestSessId);sessToSaleId.set(bestSessId,saleId);}
   });
+  
   self.postMessage({saleToSessId:[...saleToSessId],sessToSaleId:[...sessToSaleId]});
 };
 `;
@@ -467,6 +482,20 @@ const brl=v=>'R$\u00a0'+v.toFixed(2).replace('.',',');
 const fch=ch=>(ch||'').replace(/-/g,' ').toUpperCase();
 const $=id=>document.getElementById(id);
 const txt=(id,v)=>{const e=$(id);if(e){const s=String(v);if(e.textContent!==s)e.textContent=s;}};
+
+// FUNÇÃO PARA DEDUPLAR SESSÕES
+function getUniqueSessions() {
+  const byId = new Map();
+  sessions.forEach(s => {
+    const id = s.sessionId || s.id;
+    if (!id) return;
+    const existing = byId.get(id);
+    if (!existing || toDate(s.lastActivity) > toDate(existing.lastActivity)) {
+      byId.set(id, s);
+    }
+  });
+  return Array.from(byId.values());
+}
 
 const getRange=f=>{
   const now=new Date(),s=new Date();
@@ -540,18 +569,19 @@ function renderAll(){
 }
 
 function renderKPIs(){
+  const uniqueSessions = getUniqueSessions();
   const rt=getRange('today'),r7=getRange('7d');
   const inRange=(s,r,df)=>{const d=toDate(s[df]||s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end;};
-  const ts=sessions.filter(s=>inRange(s,rt,'enteredAt'));
+  const ts=uniqueSessions.filter(s=>inRange(s,rt,'enteredAt'));
   const tv=sales.filter(s=>inRange(s,rt,'createdAt')&&isPaid(s));
   const rev=tv.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
-  const s7=sessions.filter(s=>inRange(s,r7,'enteredAt'));
+  const s7=uniqueSessions.filter(s=>inRange(s,r7,'enteredAt'));
   const v7=sales.filter(s=>inRange(s,r7,'createdAt')&&isPaid(s));
-  const online=sessions.filter(s=>isOnline(s.lastActivity)).length;
+  const online=uniqueSessions.filter(s=>isOnline(s.lastActivity)).length;
 
   // Contagens browser choice (total histórico)
-  const navCount = sessions.filter(s=>s.browserChoice==='browser').length;
-  const tikCount = sessions.filter(s=>s.browserChoice==='tiktok').length;
+  const navCount = uniqueSessions.filter(s=>s.browserChoice==='browser').length;
+  const tikCount = uniqueSessions.filter(s=>s.browserChoice==='tiktok').length;
 
   txt('k-access',ts.length);txt('k-sales',tv.length);txt('k-rev',brl(rev));
   txt('k-chk',ts.filter(s=>isChk(s)).length);
@@ -560,7 +590,7 @@ function renderKPIs(){
   txt('k-browser', navCount);
   txt('k-tiktok', tikCount);
   txt('online-count',online);
-  txt('online-sub',`${sessions.length} sessões · ${idxSaleToSess.size} vinculadas`);
+  txt('online-sub',`${uniqueSessions.length} sessões únicas · ${idxSaleToSess.size} vinculadas`);
   txt('status-text','🟢 Tempo real ativo');
 
   // Resumo no Espião
@@ -569,12 +599,13 @@ function renderKPIs(){
 }
 
 function renderIns(){
+  const uniqueSessions = getUniqueSessions();
   const r7=getRange('7d'), r30=getRange('30d'), rt=getRange('today');
-  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
+  const s7=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
   const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
-  const s30=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
+  const s30=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
   const v30=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r30.start&&isPaid(s);});
-  const st=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=rt.start;});
+  const st=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=rt.start;});
   const vt=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=rt.start&&isPaid(s);});
 
   const tV=v7.length, tC=s7.filter(s=>isChk(s)).length;
@@ -607,8 +638,8 @@ function renderIns(){
   cards.push({t:convChk<40?'danger':convChk<60?'warn':'',e:'💳',tl:'Conv. Checkout→Venda',v:`${convChk}%`,d:`De quem chega ao checkout, <strong>${convChk}%</strong> finaliza`});
 
   // Taxa de abertura no navegador
-  const navCount = sessions.filter(s=>s.browserChoice==='browser').length;
-  const tikCount = sessions.filter(s=>s.browserChoice==='tiktok').length;
+  const navCount = uniqueSessions.filter(s=>s.browserChoice==='browser').length;
+  const tikCount = uniqueSessions.filter(s=>s.browserChoice==='tiktok').length;
   const totalChoice = navCount + tikCount;
   if(totalChoice > 0) {
     const navRate = (navCount / totalChoice * 100).toFixed(1);
@@ -646,6 +677,7 @@ function renderIns(){
 }
 
 function renderCmp(){
+  const uniqueSessions = getUniqueSessions();
   const periods=['today','yesterday','7d','30d'];
   const metrics=[
     {n:'Acessos',fn:()=>true,src:'sessions',df:'enteredAt'},
@@ -659,7 +691,7 @@ function renderCmp(){
   const b=$('cmp-body');if(!b)return;
   b.innerHTML=metrics.map(mt=>{
     const vals=periods.map(p=>{
-      const r=getRange(p),arr=mt.src==='sales'?sales:sessions;
+      const r=getRange(p),arr=mt.src==='sales'?sales:uniqueSessions;
       return arr.filter(s=>{const d=toDate(s[mt.df]||s.lastActivity);return d&&d>=r.start&&d<=r.end&&mt.fn(s);}).length;
     });
     return`<tr><td class="cl">${mt.n}</td>${vals.map((v,i)=>`<td class="cv${i===0&&v>0?' hi':''}">${v}</td>`).join('')}</tr>`;
@@ -701,8 +733,9 @@ function renderHM(){
 }
 
 function renderPeak(){
+  const uniqueSessions = getUniqueSessions();
   const byH={};
-  sessions.forEach(s=>{const d=toDate(s.enteredAt);if(!d)return;const h=d.getHours();if(!byH[h])byH[h]=new Set();byH[h].add(s.sessionId||s.id);});
+  uniqueSessions.forEach(s=>{const d=toDate(s.enteredAt);if(!d)return;const h=d.getHours();if(!byH[h])byH[h]=new Set();byH[h].add(s.sessionId||s.id);});
   const labels=Array.from({length:24},(_,i)=>i.toString().padStart(2,'0')+'h');
   const data=Array.from({length:24},(_,i)=>byH[i]?byH[i].size:0);
   const ctx=$('peakChart');if(!ctx)return;
@@ -711,10 +744,11 @@ function renderPeak(){
 }
 
 function renderCh(){
+  const uniqueSessions = getUniqueSessions();
   const p=$('ch-period')?.value||'7d',r=getRange(p);
   const el=$('ch-grid');if(!el)return;
   const data=CHANNELS.map(ch=>{
-    const sc=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end&&matchCh(s,ch);});
+    const sc=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r.start&&d<=r.end&&matchCh(s,ch);});
     const vc=sales.filter(s=>{const d=toDate(s.createdAt);if(!d||d<r.start||d>r.end||!isPaid(s))return false;const c=getSaleCh(s);return c&&(c===ch||c.includes(ch));});
     const rev=vc.reduce((a,s)=>a+net(s.amount||0,s.paymentMethod),0);
     const conv=sc.length>0?(vc.length/sc.length*100).toFixed(1):'0.0';
@@ -737,14 +771,13 @@ window.setSpy=(f,btn)=>{
 
 function renderSpy(){
   const el=$('spy-grid');if(!el)return;
-  const seen=new Set();
-  const uniq=sessions.filter(s=>{const id=s.sessionId||s.id;if(seen.has(id))return false;seen.add(id);return true;});
-  let list=uniq;
-  if(spyFilter==='online')   list=uniq.filter(s=>isOnline(s.lastActivity));
-  if(spyFilter==='checkout') list=uniq.filter(s=>isChk(s));
-  if(spyFilter==='sale')     list=uniq.filter(s=>idxSessToSale.has(s.sessionId||s.id));
-  if(spyFilter==='browser')  list=uniq.filter(s=>s.browserChoice==='browser');
-  if(spyFilter==='tiktok')   list=uniq.filter(s=>s.browserChoice==='tiktok');
+  const uniqueSessions = getUniqueSessions();
+  let list=uniqueSessions;
+  if(spyFilter==='online')   list=uniqueSessions.filter(s=>isOnline(s.lastActivity));
+  if(spyFilter==='checkout') list=uniqueSessions.filter(s=>isChk(s));
+  if(spyFilter==='sale')     list=uniqueSessions.filter(s=>idxSessToSale.has(s.sessionId||s.id));
+  if(spyFilter==='browser')  list=uniqueSessions.filter(s=>s.browserChoice==='browser');
+  if(spyFilter==='tiktok')   list=uniqueSessions.filter(s=>s.browserChoice==='tiktok');
 
   list=list.sort((a,b)=>(toDate(b.lastActivity)||0)-(toDate(a.lastActivity)||0)).slice(0,40);
   if(!list.length){el.innerHTML='<div class="empty">Nenhum lead encontrado</div>';return;}
@@ -851,10 +884,11 @@ window.setITab=(tab,btn)=>{
 
 /* ── DICAS ── */
 function renderTips(){
+  const uniqueSessions = getUniqueSessions();
   const r7=getRange('7d'),r30=getRange('30d');
-  const s7=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
+  const s7=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r7.start;});
   const v7=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r7.start&&isPaid(s);});
-  const s30=sessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
+  const s30=uniqueSessions.filter(s=>{const d=toDate(s.enteredAt||s.lastActivity);return d&&d>=r30.start;});
   const v30=sales.filter(s=>{const d=toDate(s.createdAt);return d&&d>=r30.start&&isPaid(s);});
 
   const tS=s7.length,tV=v7.length,tC=s7.filter(s=>isChk(s)).length;
@@ -886,8 +920,8 @@ function renderTips(){
   const tips=[];
 
   // Taxa de abertura no navegador
-  const navCount=sessions.filter(s=>s.browserChoice==='browser').length;
-  const tikCount=sessions.filter(s=>s.browserChoice==='tiktok').length;
+  const navCount=uniqueSessions.filter(s=>s.browserChoice==='browser').length;
+  const tikCount=uniqueSessions.filter(s=>s.browserChoice==='tiktok').length;
   const totalChoice=navCount+tikCount;
   if(totalChoice>0){
     const navRate=navCount/totalChoice*100;
